@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build:next": "next build",
+    "build": "opennextjs-cloudflare build",
     "start": "next start",
     "lint": "next lint",
-    "preview": "opennextjs-cloudflare && wrangler pages dev .open-next/dist",
-    "deploy": "opennextjs-cloudflare && wrangler pages deploy .open-next/dist"
+    "preview": "opennextjs-cloudflare build && wrangler pages dev .open-next/dist",
+    "deploy": "opennextjs-cloudflare build && wrangler pages deploy .open-next/dist"
   },
   "dependencies": {
     "@saganta/stellar-appkit": "^0.2.0",
