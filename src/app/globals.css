@@ -68,17 +68,17 @@ html {
 
 html.light {
   color-scheme: light;
-  background: var(--color-bg);
-  color: var(--color-text);
+  background: #FAFAFA;
+  color: #0B0D0E;
   /* Override the dark-mode CSS variables with light-mode values so all
      components using var(--color-*) automatically switch. */
-  --color-bg: var(--color-bg);
-  --color-surface: var(--color-surface);
-  --color-surface-hover: var(--color-surface-hover);
-  --color-border: var(--color-border);
-  --color-text: var(--color-text);
-  --color-text-muted: var(--color-text-muted);
-  --color-accent: var(--color-accent-deep);
+  --color-bg: #FAFAFA;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F1F3F5;
+  --color-border: #E5E7EB;
+  --color-text: #1a1d1f;
+  --color-text-muted: #3c4043;
+  --color-accent: #0F7C5A;
 }
 
 body {
@@ -119,6 +119,7 @@ pre {
   overflow-x: auto;
   font-size: 0.875rem;
   line-height: 1.6;
+  color: var(--color-text);
 }
 
 code {
@@ -127,6 +128,7 @@ code {
   border-radius: 6px;
   padding: 0.1em 0.4em;
   font-size: 0.85em;
+  color: var(--color-text);
 }
 
 pre code {
@@ -871,6 +873,7 @@ html.light .address {
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
   background: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   line-height: 1.5;
