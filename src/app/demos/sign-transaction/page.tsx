@@ -4,8 +4,9 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { useSignTransaction, useSession } from '@saganta/stellar-appkit/react';
+import { useSignTransaction } from '@saganta/stellar-appkit/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
 export default function SignTransactionDemo() {
@@ -48,12 +49,10 @@ const RECIPIENT = 'GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q3IY7ZP4PAOMM43YA'; //
 const AMOUNT = '1';
 
 function SignDemo() {
-  const session = useSession();
   const { sign, isSigning, data, error } = useSignTransaction();
   const [xdr, setXdr] = useState<string>('');
 
-  const buildAndSign = async () => {
-    if (!session) return;
+  const buildAndSign = async (session: { address: string }) => {
     try {
       const sdk = await import('@stellar/stellar-sdk');
       const account = await new sdk.rpc.Server('https://soroban-testnet.stellar.org').getAccount(session.address);
@@ -76,15 +75,9 @@ function SignDemo() {
     }
   };
 
-  if (!session) {
-    return (
-      <div className="empty-state">
-        Connect a wallet first (use the <strong>Connect a Wallet</strong> demo above).
-      </div>
-    );
-  }
-
   return (
+    <ConnectGate>
+      {(session) => (
     <div>
       <div className="field">
         <label className="field__label">Recipient</label>
@@ -97,7 +90,7 @@ function SignDemo() {
 
       <button
         className="btn btn--primary"
-        onClick={buildAndSign}
+        onClick={() => buildAndSign(session)}
         disabled={isSigning}
       >
         {isSigning ? 'Check your wallet...' : 'Build & sign transaction'}
@@ -125,6 +118,8 @@ function SignDemo() {
 
       <ErrorBlock error={error} style={{ marginTop: '1rem' }} />
     </div>
+      )}
+    </ConnectGate>
   );
 }
 

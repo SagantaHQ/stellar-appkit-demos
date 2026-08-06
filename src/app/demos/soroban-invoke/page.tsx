@@ -4,9 +4,10 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { useSoroban, useSession } from '@saganta/stellar-appkit/react';
+import { useSoroban } from '@saganta/stellar-appkit/react';
 import { Networks } from '@stellar/stellar-sdk';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
 const TOKEN_CONTRACT = 'CBETT2CXOPPQQT2KWYKNHI6W2W2O2VJVUFPJQIBKDS2KSVV7DSOLQXOX'; // USDC on Testnet
@@ -49,24 +50,13 @@ export default function SorobanInvokeDemo() {
 }
 
 function InvokeDemo() {
-  const session = useSession();
   const { invoke, previewInvoke, status, lastResult, error } = useSoroban({
     rpcUrl: RPC_URL,
     networkPassphrase: Networks.TESTNET,
   });
   const [preview, setPreview] = useState<unknown>(null);
 
-  if (!session) {
-    return (
-      <div className="empty-state">
-        Connect a wallet first (use the <strong>Connect a Wallet</strong> demo above).
-      </div>
-    );
-  }
-
-  const args = [session.address];
-
-  const handlePreview = async () => {
+  const handlePreview = async (args: unknown[]) => {
     try {
       const result = await previewInvoke({
         contractId: TOKEN_CONTRACT,
@@ -79,7 +69,7 @@ function InvokeDemo() {
     }
   };
 
-  const handleInvoke = async () => {
+  const handleInvoke = async (args: unknown[]) => {
     try {
       await invoke({
         contractId: TOKEN_CONTRACT,
@@ -92,6 +82,10 @@ function InvokeDemo() {
   };
 
   return (
+    <ConnectGate>
+      {(session) => {
+        const args = [session.address];
+        return (
     <div>
       <div className="field">
         <label className="field__label">Contract</label>
@@ -107,12 +101,12 @@ function InvokeDemo() {
       </div>
 
       <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap' }}>
-        <button className="btn" onClick={handlePreview}>
+        <button className="btn" onClick={() => handlePreview(args)}>
           Preview invoke (simulate only)
         </button>
         <button
           className="btn btn--primary"
-          onClick={handleInvoke}
+          onClick={() => handleInvoke(args)}
           disabled={status === 'invoking'}
         >
           {status === 'invoking' ? 'Invoking...' : 'Invoke (full pipeline)'}
@@ -143,6 +137,9 @@ function InvokeDemo() {
 
       <ErrorBlock error={error} style={{ marginTop: '1rem' }} />
     </div>
+        );
+      }}
+    </ConnectGate>
   );
 }
 

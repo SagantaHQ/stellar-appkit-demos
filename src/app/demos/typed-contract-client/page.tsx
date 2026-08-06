@@ -4,9 +4,10 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { useSoroban, useSession } from '@saganta/stellar-appkit/react';
+import { useSoroban } from '@saganta/stellar-appkit/react';
 import { Networks } from '@stellar/stellar-sdk';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
 const TOKEN_CONTRACT = 'CBETT2CXOPPQQT2KWYKNHI6W2W2O2VJVUFPJQIBKDS2KSVV7DSOLQXOX';
@@ -50,7 +51,6 @@ export default function TypedContractClientDemo() {
 type TokenContract = Record<string, (args: object) => Promise<unknown>>;
 
 function TypedDemo() {
-  const session = useSession();
   const { soroban } = useSoroban({
     rpcUrl: 'https://soroban-testnet.stellar.org',
     networkPassphrase: Networks.TESTNET,
@@ -59,13 +59,12 @@ function TypedDemo() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const callBalance = async () => {
-    if (!session) return;
+  const callBalance = async (address: string) => {
     setLoading(true);
     setError(null);
     try {
       const token = soroban.contract<TokenContract>(TOKEN_CONTRACT, { specEntries: [] });
-      const balance = await token.simulate('balance', { id: session.address }) as bigint;
+      const balance = await token.simulate('balance', { id: address }) as bigint;
       setResult({ method: 'balance', result: balance.toString() });
     } catch (err) {
       setError(String(err));
@@ -92,18 +91,12 @@ function TypedDemo() {
     }
   };
 
-  if (!session) {
-    return (
-      <div className="empty-state">
-        Connect a wallet first (use the <strong>Connect a Wallet</strong> demo above).
-      </div>
-    );
-  }
-
   return (
+    <ConnectGate>
+      {(session) => (
     <div>
       <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-        <button className="btn btn--primary" onClick={callBalance} disabled={loading}>
+        <button className="btn btn--primary" onClick={() => callBalance(session.address)} disabled={loading}>
           {loading ? 'Simulating...' : 'token.balance(address)'}
         </button>
         <button className="btn" onClick={callMetadata} disabled={loading}>
@@ -124,6 +117,8 @@ function TypedDemo() {
         <div className="result-block result-block--error">{error}</div>
       )}
     </div>
+      )}
+    </ConnectGate>
   );
 }
 

@@ -4,8 +4,9 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { usePreviewTransaction, useSignTransaction, useSession } from '@saganta/stellar-appkit/react';
+import { usePreviewTransaction, useSignTransaction } from '@saganta/stellar-appkit/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
 const RECIPIENT = 'GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q3IY7ZP4PAOMM43YA';
@@ -48,19 +49,17 @@ export default function CustomPreviewUIDemo() {
 }
 
 function CustomPreviewDemo() {
-  const session = useSession();
   const { sign, isSigning } = useSignTransaction();
   const { preview, respond, isPending } = usePreviewTransaction();
   const [result, setResult] = useState<unknown>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSign = async () => {
-    if (!session) return;
+  const handleSign = async (address: string) => {
     setError(null);
     setResult(null);
     try {
       const sdk = await import('@stellar/stellar-sdk');
-      const account = await new sdk.rpc.Server('https://soroban-testnet.stellar.org').getAccount(session.address);
+      const account = await new sdk.rpc.Server('https://soroban-testnet.stellar.org').getAccount(address);
       const tx = new sdk.TransactionBuilder(account, {
         fee: '100',
         networkPassphrase: sdk.Networks.TESTNET,
@@ -80,17 +79,11 @@ function CustomPreviewDemo() {
     }
   };
 
-  if (!session) {
-    return (
-      <div className="empty-state">
-        Connect a wallet first (use the <strong>Connect a Wallet</strong> demo above).
-      </div>
-    );
-  }
-
   return (
+    <ConnectGate>
+      {(session) => (
     <div>
-      <button className="btn btn--primary" onClick={handleSign} disabled={isSigning}>
+      <button className="btn btn--primary" onClick={() => handleSign(session.address)} disabled={isSigning}>
         {isSigning ? 'Waiting for preview response...' : 'Sign transaction (custom preview)'}
       </button>
 
@@ -159,6 +152,8 @@ function CustomPreviewDemo() {
         </div>
       )}
     </div>
+      )}
+    </ConnectGate>
   );
 }
 

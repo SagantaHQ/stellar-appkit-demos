@@ -8,6 +8,7 @@ import {
   StellarAppKitModal,
   useConnect,
   useSession,
+  useAppKit,
 } from '@saganta/stellar-appkit/react';
 import type { StellarAppKitModalHandle } from '@saganta/stellar-appkit/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
@@ -34,6 +35,21 @@ export default function ConnectWalletDemo() {
 function ConnectDemo({ modalRef }: { modalRef: React.RefObject<StellarAppKitModalHandle | null> }) {
   const { isConnected, isConnecting } = useConnect();
   const session = useSession();
+  const client = useAppKit();
+
+  // Ensure the modal's client is set before opening. This is a workaround
+  // for a race condition where open() is called before the useEffect that
+  // sets el.client runs. Fixed in the library v0.2.1+, but we keep the
+  // guard here for backwards compatibility with older published versions.
+  const openModal = async () => {
+    const handle = modalRef.current;
+    if (!handle) return;
+    const el = handle.element;
+    if (el && !el.client) {
+      el.client = client;
+    }
+    await handle.open();
+  };
 
   return (
     <div className="demo-page__layout">
@@ -41,7 +57,7 @@ function ConnectDemo({ modalRef }: { modalRef: React.RefObject<StellarAppKitModa
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
           <button
             className="btn btn--primary"
-            onClick={() => modalRef.current?.open()}
+            onClick={openModal}
             disabled={isConnecting}
           >
             {isConnecting

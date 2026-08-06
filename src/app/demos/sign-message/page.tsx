@@ -4,8 +4,9 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { useSignMessage, useSession } from '@saganta/stellar-appkit/react';
+import { useSignMessage } from '@saganta/stellar-appkit/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
 export default function SignMessageDemo() {
@@ -43,17 +44,8 @@ export default function SignMessageDemo() {
 }
 
 function SignMessageDemoInner() {
-  const session = useSession();
   const { sign, isSigning, data, error } = useSignMessage();
   const [message, setMessage] = useState('Hello, Stellar!');
-
-  if (!session) {
-    return (
-      <div className="empty-state">
-        Connect a wallet first (use the <strong>Connect a Wallet</strong> demo above).
-      </div>
-    );
-  }
 
   const handleSign = async () => {
     try {
@@ -64,6 +56,8 @@ function SignMessageDemoInner() {
   };
 
   return (
+    <ConnectGate>
+      {(session) => (
     <div>
       <div className="field">
         <label className="field__label">Message to sign</label>
@@ -96,6 +90,8 @@ function SignMessageDemoInner() {
 
       <ErrorBlock error={error} style={{ marginTop: '1rem' }} />
     </div>
+      )}
+    </ConnectGate>
   );
 }
 
