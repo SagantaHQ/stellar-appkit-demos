@@ -9,8 +9,8 @@
     "build:cloudflare": "opennextjs-cloudflare build",
     "start": "next start",
     "lint": "next lint",
-    "preview": "opennextjs-cloudflare build && wrangler pages dev .open-next",
-    "deploy": "opennextjs-cloudflare build && wrangler pages deploy .open-next"
+    "preview": "opennextjs-cloudflare build && wrangler dev",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
   },
   "dependencies": {
     "@saganta/stellar-appkit": "^0.2.0",

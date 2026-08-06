@@ -41,25 +41,26 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Deploy to Cloudflare Pages
+## Deploy to Cloudflare Workers
 
-This project uses [OpenNext for Cloudflare](https://opennext.js.org/cloudflare) to run Next.js on Cloudflare's Workers runtime. The OpenNext build produces a `.open-next/` directory that Cloudflare Pages deploys.
+This project uses [OpenNext for Cloudflare](https://opennext.js.org/cloudflare) to run Next.js on Cloudflare's **Workers** runtime (not Pages). OpenNext builds the Next.js app into a Worker + static assets that Cloudflare deploys as a single Worker.
+
+The `wrangler.jsonc` in the repo root is the Cloudflare Workers config — it points `main` at `.open-next/worker.js` and `assets.directory` at `.open-next/assets`. OpenNext populates these during build.
 
 ### Option A — Connect via Cloudflare dashboard (recommended)
 
 1. Push this repo to GitHub.
-2. In the [Cloudflare dashboard](https://dash.cloudflare.com), go to **Workers & Pages → Create → Pages → Connect to Git**.
+2. In the [Cloudflare dashboard](https://dash.cloudflare.com), go to **Workers & Pages → Create → Workers → Connect to Git**.
 3. Select this repo.
 4. Set the build configuration:
-   - **Framework preset**: `Next.js`
    - **Build command**: `npx opennextjs-cloudflare build`
-   - **Build output directory**: `.open-next`
+   - **Deploy command**: `npx opennextjs-cloudflare deploy`
    - **Environment variables**: add `NODE_VERSION` = `20` (or later) if the default fails
 5. Click **Save and Deploy**.
 
-Cloudflare will run `npx opennextjs-cloudflare build`, which internally runs `npm run build` (= `next build`) and then bundles the output for the Workers runtime, producing `.open-next/`. The first build takes ~3-5 minutes.
+The build command runs `opennextjs-cloudflare build`, which internally calls `npm run build` (= `next build`) and then bundles the output for the Workers runtime, producing `.open-next/`. The deploy command then deploys the Worker to Cloudflare. The first build takes ~3-5 minutes.
 
-> **Important**: the `build` npm script is `next build` (NOT `opennextjs-cloudflare build`). If you set the Cloudflare build command to `npm run build`, OpenNext will call `npm run build` internally — which works, but the Cloudflare Pages build command should be `npx opennextjs-cloudflare build` so the OpenNext bundling step runs after the Next.js build.
+> **Important**: This is a **Workers** project, not a Pages project. Create it under **Workers → Connect to Git**, not Pages. If you see "Are you sure you want to proceed? wrangler deploy on a Pages project" — you're using the wrong project type. Delete it and create a Workers project instead.
 
 ### Option B — Deploy via Wrangler CLI
 
@@ -71,7 +72,7 @@ npx wrangler login
 npm run deploy
 ```
 
-This runs `opennextjs-cloudflare build && wrangler pages deploy .open-next`. The first deploy will prompt you to create a Cloudflare Pages project.
+This runs `opennextjs-cloudflare build && opennextjs-cloudflare deploy`. The first deploy will create the Worker automatically.
 
 ### Local production preview (Cloudflare simulation)
 
@@ -79,7 +80,7 @@ This runs `opennextjs-cloudflare build && wrangler pages deploy .open-next`. The
 npm run preview
 ```
 
-This builds with OpenNext and serves the production build locally via `wrangler pages dev` — useful for testing the Workers runtime before deploying.
+This builds with OpenNext and serves the production build locally via `wrangler dev` — useful for testing the Workers runtime before deploying.
 
 ### Build scripts reference
 
@@ -88,16 +89,18 @@ This builds with OpenNext and serves the production build locally via `wrangler 
 | `npm run dev` | Next.js dev server (hot reload, no OpenNext) |
 | `npm run build` | Plain `next build` — produces `.next/` (called by OpenNext internally) |
 | `npm run build:cloudflare` | **OpenNext build** — produces `.open-next/` (for Cloudflare deployment) |
-| `npm run preview` | OpenNext build + local `wrangler pages dev` |
-| `npm run deploy` | OpenNext build + `wrangler pages deploy` |
+| `npm run preview` | OpenNext build + local `wrangler dev` |
+| `npm run deploy` | OpenNext build + `opennextjs-cloudflare deploy` |
 
-> The `build` script is `next build` because OpenNext calls `npm run build` internally. If you set `build` to `opennextjs-cloudflare build`, OpenNext would call `npm run build` → `opennextjs-cloudflare build` → `npm run build` → infinite recursion. The Cloudflare Pages build command should be `npx opennextjs-cloudflare build` (or `npm run build:cloudflare`).
+> The `build` script is `next build` because OpenNext calls `npm run build` internally. If you set `build` to `opennextjs-cloudflare build`, OpenNext would call `npm run build` → `opennextjs-cloudflare build` → `npm run build` → infinite recursion. The Cloudflare build command should be `npx opennextjs-cloudflare build` (or `npm run build:cloudflare`).
 
 ### Troubleshooting
 
-**Build hangs / infinite loop** — if the `build` script is set to `opennextjs-cloudflare build`, OpenNext calls `npm run build` which calls `opennextjs-cloudflare build` which calls `npm run build` forever. Fix: keep `build` as `next build`, use `npx opennextjs-cloudflare build` (or `npm run build:cloudflare`) as the Cloudflare build command.
+**"Are you sure you want to proceed? wrangler deploy on a Pages project"** — you created a Pages project instead of a Workers project. OpenNext for Cloudflare deploys as a Worker, not a Pages site. Delete the Pages project and create a **Workers** project instead (Workers & Pages → Create → Workers → Connect to Git).
 
-**`Could not find compiled Open Next config`** — Cloudflare ran `next build` instead of `opennextjs-cloudflare build`. Set the build command to `npx opennextjs-cloudflare build` and the output directory to `.open-next`.
+**`Could not find compiled Open Next config`** — the deploy command ran but `.open-next/.build/open-next.config.edge.mjs` doesn't exist. This means either (a) the build command didn't run `opennextjs-cloudflare build`, or (b) the build command was `npm run build` (= `next build`) which produces `.next/` not `.open-next/`. Fix: set the build command to `npx opennextjs-cloudflare build`.
+
+**Build hangs / infinite loop** — if the `build` script is set to `opennextjs-cloudflare build`, OpenNext calls `npm run build` which calls `opennextjs-cloudflare build` which calls `npm run build` forever. Fix: keep `build` as `next build`, use `npx opennextjs-cloudflare build` as the Cloudflare build command.
 
 **Build OOMs locally** — the OpenNext build needs ~4-6GB RAM. If your machine has less, use Cloudflare's build environment (8GB) instead of building locally. You can still develop locally with `npm run dev` (which doesn't run OpenNext).
 
