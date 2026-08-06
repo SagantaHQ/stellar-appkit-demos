@@ -1,0 +1,7 @@
+name = "stellar-appkit-examples"
+compatibility_date = "2025-08-06"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".open-next/dist"
+
+# Cloudflare Pages project — bind via the dashboard or `wrangler pages project create`.
+# This config is used by `npm run preview` and `npm run deploy`.

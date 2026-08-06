@@ -1,0 +1,148 @@
+export interface Demo {
+  slug: string;
+  title: string;
+  description: string;
+  category: 'wallet' | 'signing' | 'soroban' | 'siws' | 'ui';
+  tags: string[];
+  /** Whether the demo includes a server-side component (API route or server action). */
+  hasServer: boolean;
+  /** Estimated difficulty for users following along. */
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+}
+
+export const demos: Demo[] = [
+  {
+    slug: 'connect-wallet',
+    title: 'Connect a Wallet',
+    description: 'The simplest possible flow — render the modal, let the user pick a wallet, show the connected address. The starting point for every other demo.',
+    category: 'wallet',
+    tags: ['react', 'modal', 'provider', 'useConnect'],
+    hasServer: false,
+    difficulty: 'beginner',
+  },
+  {
+    slug: 'multi-wallet-list',
+    title: 'Wallet Picker',
+    description: 'Build your own wallet picker UI instead of using the built-in modal. Lists every registered connector with its reachability status and icon.',
+    category: 'wallet',
+    tags: ['react', 'registry', 'reachability', 'no-modal'],
+    hasServer: false,
+    difficulty: 'intermediate',
+  },
+  {
+    slug: 'network-mismatch',
+    title: 'Network Mismatch Recovery',
+    description: 'Connect to a wallet on the wrong network, see the typed NetworkMismatchError, and watch the auto-retry mode poll until the user switches networks in their extension.',
+    category: 'wallet',
+    tags: ['react', 'network', 'error-handling', 'auto-retry'],
+    hasServer: false,
+    difficulty: 'intermediate',
+  },
+  {
+    slug: 'sign-transaction',
+    title: 'Sign a Transaction',
+    description: 'Build a simple payment XDR with @stellar/stellar-sdk, sign it through the modal\'s preview flow (decoded operations, risk flags, fee estimate), and inspect the signed result.',
+    category: 'signing',
+    tags: ['react', 'signTransaction', 'preview', 'xdr'],
+    hasServer: false,
+    difficulty: 'intermediate',
+  },
+  {
+    slug: 'sign-message',
+    title: 'Sign a Message',
+    description: 'Sign an arbitrary message with the active wallet. Shows the signedMessage bytes and the signedData field (base64 of the exact bytes the wallet signed — critical for SIWS verification).',
+    category: 'signing',
+    tags: ['react', 'signMessage', 'signedData'],
+    hasServer: false,
+    difficulty: 'beginner',
+  },
+  {
+    slug: 'soroban-invoke',
+    title: 'Soroban Contract Invoke',
+    description: 'Call a Soroban contract method end-to-end with one invoke() call: build → simulate → preview (balance deltas + fee) → sign → submit → poll. Live on Testnet against a real token contract.',
+    category: 'soroban',
+    tags: ['react', 'SorobanConnection', 'invoke', 'preview'],
+    hasServer: false,
+    difficulty: 'advanced',
+  },
+  {
+    slug: 'typed-contract-client',
+    title: 'Typed Contract Client',
+    description: 'Wrap a Soroban contract in a typed client — soroban.contract<MyInterface>() — so calls like token.transfer({ from, to, amount }) are fully typed. Includes a simulate() read-only call.',
+    category: 'soroban',
+    tags: ['react', 'ContractClient', 'typescript', 'simulate'],
+    hasServer: false,
+    difficulty: 'advanced',
+  },
+  {
+    slug: 'soroban-failover',
+    title: 'RPC Failover',
+    description: 'Configure SorobanConnection with multiple RPC URLs and watch it transparently fail over when the primary provider returns a 5xx or times out. Includes a health-status panel.',
+    category: 'soroban',
+    tags: ['react', 'rpc-failover', 'resilience'],
+    hasServer: false,
+    difficulty: 'advanced',
+  },
+  {
+    slug: 'siws-sign-in',
+    title: 'SIWS Sign-In (Client + Server)',
+    description: 'Full Sign-In With Stellar flow: client signs the SIWS message, sends {message, signedMessage, signedData, signerAddress} to a Next.js API route, server verifies with @saganta/stellar-appkit-siws-verify. Establishes a session cookie.',
+    category: 'siws',
+    tags: ['react', 'siws', 'api-route', 'cookies', 'verifySiws'],
+    hasServer: true,
+    difficulty: 'advanced',
+  },
+  {
+    slug: 'siws-session-middleware',
+    title: 'SIWS Session via Middleware',
+    description: 'Protect routes with Next.js middleware — read the SIWS session cookie server-side and redirect unauthenticated users to /sign-in. Shows the full server-side auth gate pattern.',
+    category: 'siws',
+    tags: ['react', 'middleware', 'session', 'auth-gate'],
+    hasServer: true,
+    difficulty: 'advanced',
+  },
+  {
+    slug: 'siws-debug-verification',
+    title: 'SIWS Verification Debug Mode',
+    description: 'Trigger a verification failure (wrong nonce, wrong domain, tampered message) and inspect the debug diagnostics — every candidate byte sequence the verifier tried, with reasons for rejection.',
+    category: 'siws',
+    tags: ['react', 'siws', 'debug', 'diagnostics', 'api-route'],
+    hasServer: true,
+    difficulty: 'advanced',
+  },
+  {
+    slug: 'theming-showcase',
+    title: 'Theming Showcase',
+    description: 'Every CSS custom property exposed — override accent, surface, radius, fonts, shadows in real time with a live preview. Save your theme as a snippet to paste into your own app.',
+    category: 'ui',
+    tags: ['react', 'theming', 'css-variables', 'no-modal'],
+    hasServer: false,
+    difficulty: 'beginner',
+  },
+  {
+    slug: 'modal-modes',
+    title: 'Modal Presentation Modes',
+    description: 'Switch between auto / modal / bottom-sheet / inline presentation modes with a single prop. See how the same modal adapts to desktop, mobile, and embedded use cases.',
+    category: 'ui',
+    tags: ['react', 'modal', 'mode', 'bottom-sheet', 'inline'],
+    hasServer: false,
+    difficulty: 'beginner',
+  },
+  {
+    slug: 'custom-preview-ui',
+    title: 'Custom Transaction Preview',
+    description: 'Don\'t want the built-in preview? Build your own with usePreviewTransaction() — receive the decoded operations, risk flags, and fee estimate as reactive state, respond with approve/reject.',
+    category: 'signing',
+    tags: ['react', 'usePreviewTransaction', 'custom-ui', 'no-modal'],
+    hasServer: false,
+    difficulty: 'advanced',
+  },
+];
+
+export const demoCategories: { id: Demo['category']; label: string; description: string }[] = [
+  { id: 'wallet', label: 'Wallet Connection', description: 'Connecting, switching, and recovering from network mismatches' },
+  { id: 'signing', label: 'Signing & Previews', description: 'Signing transactions, messages, and building custom preview UIs' },
+  { id: 'soroban', label: 'Soroban', description: 'Smart contract calls, typed clients, and RPC failover' },
+  { id: 'siws', label: 'Sign-In With Stellar', description: 'Self-issued auth with server-side verification and session management' },
+  { id: 'ui', label: 'UI & Theming', description: 'Modal presentation modes and CSS custom property overrides' },
+];
