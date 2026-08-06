@@ -20,8 +20,8 @@ const config: StellarAppKitProviderConfig = {
   ],
   appMetadata: {
     name: 'Stellar AppKit Examples',
-    domain: 'stellar-appkit-examples.saganta.com',
-    uri: 'https://stellar-appkit-examples.saganta.com',
+    domain: 'stellar-appkit-demos.saganta.com',
+    uri: 'https://stellar-appkit-demos.saganta.com',
   },
 };
 
