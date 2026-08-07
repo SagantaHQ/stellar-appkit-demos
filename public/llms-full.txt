@@ -1,0 +1,55 @@
+# Stellar AppKit Demos — Full Content
+
+> Live demos of @saganta/stellar-appkit — 14 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
+>
+> URL: https://demos.stellar-appkit.saganta.com
+> Library: https://github.com/SagantaHQ/stellar-appkit
+> Docs: https://stellar-appkit.saganta.com
+> npm: @saganta/stellar-appkit
+> License: MIT
+
+## What is Stellar AppKit?
+
+Stellar AppKit is a Web3Modal / Reown AppKit equivalent for Stellar. It provides one unified wallet API, a first-class Soroban layer, real transaction previews instead of raw XDR, and a themeable UI that works identically dropped into any site.
+
+## What do the demos cover?
+
+14 demos across 5 categories, each a single Next.js route you can copy into your own app:
+
+### Wallet Connection
+- Connect a Wallet: the minimal modal-based flow — render the modal, let the user pick a wallet (Freighter, Albedo, xBull), show the connected address. The starting point for every other demo.
+- Wallet Picker: build your own wallet picker UI instead of using the built-in modal. Lists every registered connector with its reachability status and icon.
+- Network Mismatch Recovery: connect to a wallet on the wrong network, see the typed NetworkMismatchError, and watch the auto-retry mode poll until the user switches networks.
+
+### Signing & Previews
+- Sign a Transaction: build a simple payment XDR with @stellar/stellar-sdk, sign it through the modal's preview flow (decoded operations, risk flags, fee estimate), and inspect the signed result.
+- Sign a Message: sign an arbitrary message with the active wallet. Shows the signedMessage bytes and the signedData field (base64 of the exact bytes the wallet signed — critical for SIWS verification).
+- Custom Transaction Preview: build your own preview UI with usePreviewTransaction() — receive the decoded operations, risk flags, and fee estimate as reactive state, respond with approve/reject.
+
+### Soroban
+- Soroban Contract Invoke: call a Soroban contract method end-to-end with one invoke() call: build → simulate → preview (balance deltas + fee) → sign → submit → poll. Live on Testnet against a real token contract.
+- Typed Contract Client: wrap a Soroban contract in a typed client — soroban.contract<MyInterface>() — so calls like token.transfer({ from, to, amount }) are fully typed. Includes a simulate() read-only call.
+- RPC Failover: configure SorobanConnection with multiple RPC URLs and watch it transparently fail over when the primary provider returns a 5xx or times out. Includes a health-status panel.
+
+### Sign-In With Stellar (SIWS)
+- SIWS Sign-In: full client + server flow — client signs the SIWS message, sends {message, signedMessage, signedData, signerAddress} to a Next.js API route, server verifies with @saganta/stellar-appkit-siws-verify. Establishes a session cookie.
+- SIWS Session via Middleware: protect routes with Next.js middleware — read the SIWS session cookie server-side and redirect unauthenticated users to /sign-in.
+- SIWS Debug Verification: trigger a verification failure (wrong nonce, wrong domain, tampered message) and inspect the debug diagnostics — every candidate byte sequence the verifier tried, with reasons for rejection.
+
+### UI & Theming
+- Theming Showcase: every CSS custom property exposed — override accent, surface, radius, fonts, shadows in real time with a live preview. Save your theme as a snippet to paste into your own app.
+- Modal Presentation Modes: switch between auto / modal / bottomsheet / inline presentation modes with a single prop. See how the same modal adapts to desktop, mobile, and embedded use cases.
+
+## Technology Stack
+- Next.js 15 (App Router, React 19)
+- OpenNext for Cloudflare (runs Next.js on Cloudflare Workers)
+- @saganta/stellar-appkit v0.2.2
+- @saganta/stellar-appkit-siws-verify v0.2.2
+- Tailwind CSS v4 (CSS-first config)
+- Stellar Testnet (all demos use Testnet — get test XLM from friendbot.stellar.org)
+
+## Links
+- Library: https://github.com/SagantaHQ/stellar-appkit
+- Documentation: https://stellar-appkit.saganta.com
+- Demos source: https://github.com/SagantaHQ/stellar-appkit-demos
+- npm: https://www.npmjs.com/package/@saganta/stellar-appkit

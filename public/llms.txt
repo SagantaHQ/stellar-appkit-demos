@@ -1,0 +1,42 @@
+# Stellar AppKit Demos
+
+> Live, copy-pasteable demos of @saganta/stellar-appkit — 14 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
+>
+> URL: https://demos.stellar-appkit.saganta.com
+> Library: https://github.com/SagantaHQ/stellar-appkit
+> Docs: https://stellar-appkit.saganta.com
+> npm: @saganta/stellar-appkit
+> License: MIT
+
+## Demos
+
+### Wallet Connection
+- [Connect a Wallet](https://demos.stellar-appkit.saganta.com/demos/connect-wallet): The minimal modal-based flow — render the modal, let the user pick a wallet, show the connected address
+- [Wallet Picker](https://demos.stellar-appkit.saganta.com/demos/multi-wallet-list): Build your own wallet picker UI with registry.listReachability()
+- [Network Mismatch Recovery](https://demos.stellar-appkit.saganta.com/demos/network-mismatch): Typed NetworkMismatchError + auto-retry polling
+
+### Signing & Previews
+- [Sign a Transaction](https://demos.stellar-appkit.saganta.com/demos/sign-transaction): Build a payment XDR, sign through the modal's preview flow
+- [Sign a Message](https://demos.stellar-appkit.saganta.com/demos/sign-message): Sign an arbitrary message, inspect signedData for SIWS verification
+- [Custom Transaction Preview](https://demos.stellar-appkit.saganta.com/demos/custom-preview-ui): Build your own preview UI with usePreviewTransaction()
+
+### Soroban
+- [Soroban Contract Invoke](https://demos.stellar-appkit.saganta.com/demos/soroban-invoke): Full invoke() pipeline — build → simulate → preview → sign → submit → poll
+- [Typed Contract Client](https://demos.stellar-appkit.saganta.com/demos/typed-contract-client): Type-safe contract calls with soroban.contract<T>()
+- [RPC Failover](https://demos.stellar-appkit.saganta.com/demos/soroban-failover): Multi-provider failover with health tracking
+
+### Sign-In With Stellar
+- [SIWS Sign-In](https://demos.stellar-appkit.saganta.com/demos/siws-sign-in): Full client + server flow with session cookie — verifySiws() server-side
+- [SIWS Session via Middleware](https://demos.stellar-appkit.saganta.com/demos/siws-session-middleware): Protect routes with Next.js middleware
+- [SIWS Debug Verification](https://demos.stellar-appkit.saganta.com/demos/siws-debug-verification): Diagnostics dump of every candidate byte sequence
+
+### UI & Theming
+- [Theming Showcase](https://demos.stellar-appkit.saganta.com/demos/theming-showcase): Every CSS custom property, live preview with presets
+- [Modal Presentation Modes](https://demos.stellar-appkit.saganta.com/demos/modal-modes): Switch between auto / modal / bottomsheet / inline modes
+
+## Links
+
+- [Library GitHub](https://github.com/SagantaHQ/stellar-appkit)
+- [Documentation](https://stellar-appkit.saganta.com)
+- [Demos source code](https://github.com/SagantaHQ/stellar-appkit-demos)
+- [npm: @saganta/stellar-appkit](https://www.npmjs.com/package/@saganta/stellar-appkit)

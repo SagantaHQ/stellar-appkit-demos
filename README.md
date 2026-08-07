@@ -1,8 +1,14 @@
-# Stellar AppKit Examples
+# Stellar AppKit Demos
+
+**Live at [demos.stellar-appkit.saganta.com](https://demos.stellar-appkit.saganta.com)**
 
 Live, copy-pasteable demos of [`@saganta/stellar-appkit`](https://github.com/SagantaHQ/stellar-appkit) — wallet connection, transaction signing, Soroban contract calls, and Sign-In With Stellar.
 
-Built with **Next.js 15** + **OpenNext for Cloudflare** (deployed on Cloudflare Pages' Workers runtime).
+- **Docs:** [stellar-appkit.saganta.com](https://stellar-appkit.saganta.com)
+- **Library:** [github.com/SagantaHQ/stellar-appkit](https://github.com/SagantaHQ/stellar-appkit)
+- **npm:** [@saganta/stellar-appkit](https://www.npmjs.com/package/@saganta/stellar-appkit)
+
+Built with **Next.js 15** + **OpenNext for Cloudflare** (deployed on Cloudflare Workers).
 
 ## Demos
 
