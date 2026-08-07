@@ -8,9 +8,7 @@ import { useConnect, useSession } from '@saganta/stellar-appkit-ui-web/react';
 import { QRCodeSVG } from 'qrcode.react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
-import { ConnectGate } from '@/components/connect-gate';
 import {
-  openAppKitModal,
   setWalletConnectUriListener,
   isWalletConnectEnabled,
 } from '@/components/appkit-provider';
@@ -57,25 +55,21 @@ export default function WalletConnectDemo() {
 }
 
 function WalletConnectDemoInner() {
-  const { isConnected, isConnecting } = useConnect();
+  const { connect, isConnected, isConnecting } = useConnect();
   const session = useSession();
   const [wcUri, setWcUri] = useState<string | null>(null);
-  const [isConnectingWC, setIsConnectingWC] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Subscribe to WalletConnect pairing URIs from the connector
+  // Subscribe to WalletConnect pairing URIs from the connector.
+  // The connector fires onUri(uri) when it generates a pairing code,
+  // which happens during connect() — before the wallet approves.
   useEffect(() => {
     setWalletConnectUriListener((uri) => {
       setWcUri(uri);
-      if (uri) {
-        setIsConnectingWC(true);
-      } else {
-        setIsConnectingWC(false);
-      }
     });
     return () => {
       setWalletConnectUriListener(null);
       setWcUri(null);
-      setIsConnectingWC(false);
     };
   }, []);
 
@@ -83,19 +77,50 @@ function WalletConnectDemoInner() {
   useEffect(() => {
     if (isConnected && wcUri) {
       setWcUri(null);
-      setIsConnectingWC(false);
     }
   }, [isConnected, wcUri]);
 
+  // Clear error when a new connection attempt starts
+  useEffect(() => {
+    if (isConnecting) setError(null);
+  }, [isConnecting]);
+
   const handleConnect = async () => {
+    setError(null);
     setWcUri(null);
-    setIsConnectingWC(true);
-    openAppKitModal();
+    try {
+      // Call connect('walletconnect') directly — NOT via the modal.
+      // This lets us render the QR code on the page itself, which is
+      // the correct UX for WalletConnect (the QR IS the connection UI).
+      // The modal also supports WC QR rendering (via setOnUri), but for
+      // this demo we show it on the page so you can see both approaches.
+      await connect('walletconnect');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+      setWcUri(null);
+    }
   };
 
+  // --- Connected state ---
+  if (isConnected && session) {
+    return (
+      <div className="demo-page__layout">
+        <DemoPanel title="Connected" full>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div className="status status--success" style={{ alignSelf: 'flex-start' }}>connected</div>
+            <div className="field__label">Connected address</div>
+            <div className="address">{session.address}</div>
+            <div style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
+              Wallet: <code>{session.walletId}</code> · Network: <code>{session.network}</code>
+            </div>
+          </div>
+        </DemoPanel>
+      </div>
+    );
+  }
+
+  // --- Connecting / idle state ---
   return (
-    <ConnectGate>
-      {(session) => (
     <div className="demo-page__layout">
       <DemoPanel title="Live demo">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -103,15 +128,10 @@ function WalletConnectDemoInner() {
             <button
               className="btn btn--primary"
               onClick={handleConnect}
-              disabled={isConnecting || isConnectingWC}
+              disabled={isConnecting}
             >
-              {isConnecting || isConnectingWC
-                ? 'Connecting...'
-                : isConnected
-                  ? 'Open wallet'
-                  : 'Connect WalletConnect'}
+              {isConnecting ? 'Connecting...' : 'Connect WalletConnect'}
             </button>
-            {isConnected && <span className="status status--success">connected</span>}
           </div>
 
           {/* QR code panel — shows when a pairing URI is available */}
@@ -132,7 +152,7 @@ function WalletConnectDemoInner() {
                 borderRadius: '12px',
                 lineHeight: 0,
               }}>
-                <QRCodeSVG value={wcUri} size={220} />
+                <QRCodeSVG value={wcUri} size={220} marginSize={1} />
               </div>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '0.9375rem', fontWeight: 600, marginBottom: '0.25rem' }}>
@@ -156,29 +176,36 @@ function WalletConnectDemoInner() {
             </div>
           )}
 
-          {/* Connected state */}
-          {isConnected && session ? (
-            <div>
-              <div className="field__label" style={{ marginBottom: '0.375rem' }}>Connected address</div>
-              <div className="address">{session.address}</div>
-              <div style={{ marginTop: '0.75rem', fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
-                Wallet: <code>{session.walletId}</code> · Network: <code>{session.network}</code>
-              </div>
+          {/* Error state */}
+          {error && (
+            <div className="result-block result-block--error">
+              <strong>Connection failed:</strong> {error}
             </div>
-          ) : (
-            !wcUri && (
-              <div className="empty-state">
-                <div className="empty-state__icon">
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="3" width="7" height="7" rx="1" />
-                    <rect x="3" y="14" width="7" height="7" rx="1" />
-                    <rect x="14" y="14" width="7" height="7" rx="1" />
-                  </svg>
-                </div>
-                Click <strong>Connect WalletConnect</strong> to generate a QR code.
+          )}
+
+          {/* Idle state — before clicking connect */}
+          {!wcUri && !isConnecting && !error && (
+            <div className="empty-state">
+              <div className="empty-state__icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <rect x="14" y="14" width="7" height="7" rx="1" />
+                </svg>
               </div>
-            )
+              Click <strong>Connect WalletConnect</strong> to generate a QR code.
+            </div>
+          )}
+
+          {/* Loading state — connecting but no URI yet */}
+          {isConnecting && !wcUri && (
+            <div className="empty-state">
+              <div className="empty-state__icon">
+                <div className="wallet-list-loading" />
+              </div>
+              Generating pairing code…
+            </div>
           )}
         </div>
       </DemoPanel>
@@ -186,15 +213,22 @@ function WalletConnectDemoInner() {
       <DemoPanel title="How it works">
         <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: 0 }}>
           WalletConnect is a relay protocol that connects web apps to mobile
-          wallets (Hana, Lobstr, Hot Wallet) via a QR code. The connector:
+          wallets (Hana, Lobstr, Hot Wallet) via a QR code. The flow:
         </p>
         <ol style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.7, margin: '0.75rem 0', paddingLeft: '1.25rem' }}>
-          <li>Calls <code>SignClient.init()</code> with your project ID</li>
+          <li><code>connect('walletconnect')</code> calls <code>SignClient.init()</code></li>
           <li>Generates a pairing URI via <code>client.connect()</code></li>
-          <li>Fires <code>onUri(uri)</code> — your app renders it as a QR code</li>
+          <li>Fires <code>onUri(uri)</code> — this demo renders it as a QR code</li>
           <li>The wallet scans the QR, approves the connection</li>
           <li><code>connect()</code> resolves with the wallet&apos;s address</li>
         </ol>
+        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: '1rem 0 0' }}>
+          <strong>Note:</strong> This demo calls <code>connect()</code>{' '}
+          <em>directly</em> instead of opening the modal, because the QR code
+          needs to be visible on the page. The modal also supports WC QR
+          rendering — if you click WalletConnect from the modal&apos;s wallet
+          list, the QR appears inside the modal.
+        </p>
         <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: '1rem 0 0' }}>
           The session topic is persisted in <code>localStorage</code>, so{' '}
           <code>appkit.restore()</code> reconnects automatically on page reload
@@ -202,8 +236,6 @@ function WalletConnectDemoInner() {
         </p>
       </DemoPanel>
     </div>
-      )}
-    </ConnectGate>
   );
 }
 
