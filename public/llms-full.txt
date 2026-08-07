@@ -1,6 +1,6 @@
 # Stellar AppKit Demos — Full Content
 
-> Live demos of @saganta/stellar-appkit — 15 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
+> Live demos of @saganta/stellar-appkit — 17 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
 >
 > URL: https://demos.stellar-appkit.saganta.com
 > Library: https://github.com/sagantaHQ/stellar-appkit
@@ -14,7 +14,7 @@ Stellar AppKit is a Web3Modal / Reown AppKit equivalent for Stellar. It provides
 
 ## What do the demos cover?
 
-15 demos across 5 categories, each a single Next.js route you can copy into your own app:
+17 demos across 5 categories, each a single Next.js route you can copy into your own app:
 
 ### Wallet Connection
 - Connect a Wallet: the minimal modal-based flow — render the modal, let the user pick a wallet (Freighter, Albedo, xBull), show the connected address. The starting point for every other demo.
@@ -44,9 +44,9 @@ Stellar AppKit is a Web3Modal / Reown AppKit equivalent for Stellar. It provides
 ## Technology Stack
 - Next.js 15 (App Router, React 19)
 - OpenNext for Cloudflare (runs Next.js on Cloudflare Workers)
-- @saganta/stellar-appkit v1.0.3
-- @saganta/stellar-appkit-ui-web v1.0.3
-- @saganta/stellar-appkit-siws-verify v1.0.3
+- @saganta/stellar-appkit v1.2.1
+- @saganta/stellar-appkit-ui-web v1.2.1
+- @saganta/stellar-appkit-siws-verify v1.2.1
 - Tailwind CSS v4 (CSS-first config)
 - Stellar Testnet (all demos use Testnet — get test XLM from friendbot.stellar.org)
 

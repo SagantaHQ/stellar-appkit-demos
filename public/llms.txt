@@ -1,6 +1,6 @@
 # Stellar AppKit Demos
 
-> Live, copy-pasteable demos of @saganta/stellar-appkit — 15 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
+> Live, copy-pasteable demos of @saganta/stellar-appkit — 17 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
 >
 > URL: https://demos.stellar-appkit.saganta.com
 > Library: https://github.com/sagantaHQ/stellar-appkit
