@@ -1,6 +1,6 @@
 # Stellar AppKit Demos
 
-> Live, copy-pasteable demos of @saganta/stellar-appkit — 14 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
+> Live, copy-pasteable demos of @saganta/stellar-appkit — 15 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
 >
 > URL: https://demos.stellar-appkit.saganta.com
 > Library: https://github.com/sagantaHQ/stellar-appkit
@@ -13,6 +13,7 @@
 ### Wallet Connection
 - [Connect a Wallet](https://demos.stellar-appkit.saganta.com/demos/connect-wallet): The minimal modal-based flow — render the modal, let the user pick a wallet, show the connected address
 - [Wallet Picker](https://demos.stellar-appkit.saganta.com/demos/multi-wallet-list): Build your own wallet picker UI with registry.listReachability()
+- [WalletConnect (Hana, Lobstr)](https://demos.stellar-appkit.saganta.com/demos/walletconnect): Connect mobile wallets via QR pairing — requires NEXT_PUBLIC_REOWN_PROJECT_ID env var, shows setup guide when not configured
 - [Network Mismatch Recovery](https://demos.stellar-appkit.saganta.com/demos/network-mismatch): Typed NetworkMismatchError + auto-retry polling
 
 ### Signing & Previews

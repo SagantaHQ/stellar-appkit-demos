@@ -16,8 +16,6 @@ const nextConfig: NextConfig = {
     '@ledgerhq/hw-transport-webhid',
     '@ledgerhq/hw-transport-webusb',
     '@walletconnect/sign-client',
-    '@use-gesture/vanilla',
-    'motion',
   ],
 };
 

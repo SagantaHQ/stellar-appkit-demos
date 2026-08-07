@@ -12,11 +12,12 @@ Built with **Next.js 15** + **OpenNext for Cloudflare** (deployed on Cloudflare 
 
 ## Demos
 
-14 demos across 5 categories — each is a single Next.js route you can copy into your own app:
+15 demos across 5 categories — each is a single Next.js route you can copy into your own app:
 
 ### Wallet Connection
 - **Connect a Wallet** — the minimal modal-based flow
 - **Wallet Picker** — build your own picker UI with `registry.listReachability()`
+- **WalletConnect (Hana, Lobstr)** — connect mobile wallets via QR pairing (requires `NEXT_PUBLIC_REOWN_PROJECT_ID`)
 - **Network Mismatch Recovery** — typed `NetworkMismatchError` + auto-retry
 
 ### Signing & Previews
@@ -36,7 +37,22 @@ Built with **Next.js 15** + **OpenNext for Cloudflare** (deployed on Cloudflare 
 
 ### UI & Theming
 - **Theming Showcase** — every CSS custom property, live preview
-- **Modal Presentation Modes** — auto / modal / bottom-sheet / inline
+- **Modal Presentation Modes & Animations** — auto / modal / bottom-sheet / inline + WAAPI animation presets
+- **Animation Presets** — focused demo of every WAAPI animation preset
+
+## Environment variables
+
+The WalletConnect demo requires a project ID from [WalletConnect Cloud](https://cloud.walletconnect.com) (free). Copy `.env.example` to `.env.local` and fill it in:
+
+```bash
+cp .env.example .env.local
+# Edit .env.local and set NEXT_PUBLIC_REOWN_PROJECT_ID
+```
+
+| Variable | Required for | Description |
+|---|---|---|
+| `NEXT_PUBLIC_REOWN_PROJECT_ID` | `/demos/walletconnect` | WalletConnect Cloud project ID — enables Hana, Lobstr, Hot Wallet |
+| `NEXT_PUBLIC_GA_ID` | (optional) | Google Analytics ID (`G-XXXXXXXXXX`) |
 
 ## Local development
 
@@ -120,8 +136,10 @@ All demos run on **Stellar Testnet**. Connect a wallet with Testnet funds — ge
 
 - [Next.js 15](https://nextjs.org) (App Router, React 19)
 - [OpenNext for Cloudflare](https://opennext.js.org/cloudflare) — runs Next.js on Cloudflare Workers
-- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v0.2.0
-- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v0.2.0
+- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v1.0.6
+- [@saganta/stellar-appkit-ui-web](https://github.com/sagantaHQ/stellar-appkit) v1.0.6
+- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v1.0.6
+- [qrcode.react](https://github.com/zpao/qrcode.react) v4 — QR code rendering for the WalletConnect demo
 - [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config, no `tailwind.config.js`)
 
 ## License

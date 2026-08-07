@@ -33,8 +33,6 @@ const existingExternals = (config as Record<string, unknown>).edgeExternals as s
   '@ledgerhq/hw-transport-webhid',
   '@ledgerhq/hw-transport-webusb',
   '@walletconnect/sign-client',
-  '@use-gesture/vanilla',
-  'motion',
 ];
 
 export default config;

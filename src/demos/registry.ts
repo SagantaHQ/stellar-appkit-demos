@@ -30,6 +30,15 @@ export const demos: Demo[] = [
     difficulty: 'intermediate',
   },
   {
+    slug: 'walletconnect',
+    title: 'WalletConnect (Hana, Lobstr)',
+    description: 'Connect mobile wallets (Hana, Lobstr, Hot Wallet) via WalletConnect QR pairing. Requires NEXT_PUBLIC_REOWN_PROJECT_ID env var — the demo shows a setup guide when it\'s not configured.',
+    category: 'wallet',
+    tags: ['react', 'walletconnect', 'qr', 'hana', 'lobstr', 'mobile'],
+    hasServer: false,
+    difficulty: 'intermediate',
+  },
+  {
     slug: 'network-mismatch',
     title: 'Network Mismatch Recovery',
     description: 'Connect to a wallet on the wrong network, see the typed NetworkMismatchError, and watch the auto-retry mode poll until the user switches networks in their extension.',

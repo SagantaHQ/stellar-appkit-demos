@@ -5,35 +5,99 @@ import {
   useAppKit,
   type StellarAppKitProviderConfig,
 } from '@saganta/stellar-appkit-ui-web/react';
-import { type ReactNode, useRef, useEffect } from 'react';
+import { type ReactNode, useRef, useEffect, useMemo } from 'react';
 import {
   createFreighterConnector,
   createAlbedoConnector,
   createXBullConnector,
+  createLedgerConnector,
+  createWalletConnectConnector,
+  type WalletConnector,
 } from '@saganta/stellar-appkit';
 import type { StellarAppKit } from '@saganta/stellar-appkit';
 // Static import — registers the <stellar-appkit-modal> custom element.
 import '@saganta/stellar-appkit-ui-web';
+import { Networks } from '@stellar/stellar-sdk';
 
-// NOTE: As of @saganta/stellar-appkit v1.0.3, `connectors` is optional —
-// omit it to auto-register Freighter, Albedo, xBull, and Ledger via the new
-// `defaultConnectors()` helper. We pass an explicit list here for backwards
-// compatibility with consumers on v1.0.2 or earlier.
-const config: StellarAppKitProviderConfig = {
-  network: 'TESTNET',
-  connectors: [
+/**
+ * WalletConnect project ID from Cloudflare env (NEXT_PUBLIC_REOWN_PROJECT_ID).
+ *
+ * Get one at https://cloud.walletconnect.com/ — it's free. When set, the
+ * WalletConnect connector is added to the registry so Hana, Lobstr, and Hot
+ * Wallet can connect via QR pairing. When unset, WalletConnect is silently
+ * omitted (the other connectors still work).
+ *
+ * In local dev, create a .env.local file with:
+ *   NEXT_PUBLIC_REOWN_PROJECT_ID=your-project-id-here
+ */
+const WC_PROJECT_ID = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID;
+
+/**
+ * A module-level callback that the WalletConnect connector calls with the
+ * pairing URI. The WalletConnect demo page subscribes to this so it can
+ * render the QR code. Other demos that don't care about WC just ignore it.
+ *
+ * We use this indirection because the connector is created once at module
+ * load time (before any demo page mounts), but the QR code UI is per-page.
+ */
+type UriListener = (uri: string | null) => void;
+let uriListener: UriListener | null = null;
+
+export function setWalletConnectUriListener(fn: UriListener | null) {
+  uriListener = fn;
+}
+
+/** Returns true if the WalletConnect connector is registered (env var set). */
+export function isWalletConnectEnabled(): boolean {
+  return !!WC_PROJECT_ID;
+}
+
+function buildConnectors(): WalletConnector[] {
+  // Start with the default browser-side wallets.
+  // Once v1.0.6+ is published, this can be replaced with `defaultConnectors()`.
+  const connectors: WalletConnector[] = [
     createFreighterConnector(),
     createAlbedoConnector(),
     createXBullConnector(),
-  ],
-  appMetadata: {
-    name: 'Stellar AppKit Demos',
-    domain: 'demos.stellar-appkit.saganta.com',
-    uri: 'https://demos.stellar-appkit.saganta.com',
-  },
-};
+    createLedgerConnector(),
+  ];
+
+  // Add WalletConnect if the project ID is configured
+  if (WC_PROJECT_ID) {
+    connectors.push(
+      createWalletConnectConnector({
+        projectId: WC_PROJECT_ID,
+        metadata: {
+          name: 'Stellar AppKit Demos',
+          description: 'Live demos of @saganta/stellar-appkit — wallet connection, signing, Soroban, SIWS',
+          url: 'https://demos.stellar-appkit.saganta.com',
+          icons: ['https://demos.stellar-appkit.saganta.com/icon.png'],
+        },
+        onUri: (uri) => {
+          // Forward the URI to whatever listener is currently registered
+          // (the WalletConnect demo page sets this when it mounts)
+          if (uriListener) uriListener(uri);
+        },
+        networkPassphrase: Networks.TESTNET,
+      }),
+    );
+  }
+
+  return connectors;
+}
+
+function useConfig(): StellarAppKitProviderConfig {
+  return useMemo(() => ({
+    network: 'TESTNET',
+    connectors: buildConnectors(),
+    appMetadata: {
+      name: 'Stellar AppKit Demos',
+    },
+  }), []);
+}
 
 export function AppKitProvider({ children }: { children: ReactNode }) {
+  const config = useConfig();
   return (
     <StellarAppKitProvider config={config}>
       <PersistentModal />
