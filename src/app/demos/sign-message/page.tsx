@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { useSignMessage } from '@saganta/stellar-appkit/react';
+import { useSignMessage } from '@saganta/stellar-appkit-ui-web/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
 import { ConnectGate } from '@/components/connect-gate';
@@ -96,7 +96,7 @@ function SignMessageDemoInner() {
   );
 }
 
-const CODE = `import { useSignMessage, useSession } from '@saganta/stellar-appkit/react';
+const CODE = `import { useSignMessage, useSession } from '@saganta/stellar-appkit-ui-web/react';
 
 function MessageSigner() {
   const session = useSession();

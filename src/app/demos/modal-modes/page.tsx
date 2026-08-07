@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useRef, useState } from 'react';
-import { useAppKit } from '@saganta/stellar-appkit/react';
+import { useAppKit } from '@saganta/stellar-appkit-ui-web/react';
 import type { StellarAppKit } from '@saganta/stellar-appkit';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';

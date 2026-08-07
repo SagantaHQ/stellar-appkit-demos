@@ -4,7 +4,7 @@ import {
   StellarAppKitProvider,
   useAppKit,
   type StellarAppKitProviderConfig,
-} from '@saganta/stellar-appkit/react';
+} from '@saganta/stellar-appkit-ui-web/react';
 import { type ReactNode, useRef, useEffect } from 'react';
 import {
   createFreighterConnector,
@@ -13,7 +13,7 @@ import {
 } from '@saganta/stellar-appkit';
 import type { StellarAppKit } from '@saganta/stellar-appkit';
 // Static import — registers the <saganta-appkit-modal> custom element.
-import '@saganta/stellar-appkit/ui-web';
+import '@saganta/stellar-appkit-ui-web';
 
 const config: StellarAppKitProviderConfig = {
   network: 'TESTNET',

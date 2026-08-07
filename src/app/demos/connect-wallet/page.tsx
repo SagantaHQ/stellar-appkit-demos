@@ -3,7 +3,7 @@
 // Force dynamic rendering — the modal uses HTMLElement which is undefined during SSR.
 export const dynamic = 'force-dynamic';
 
-import { useConnect, useSession } from '@saganta/stellar-appkit/react';
+import { useConnect, useSession } from '@saganta/stellar-appkit-ui-web/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
 import { openAppKitModal } from '@/components/appkit-provider';
@@ -94,10 +94,10 @@ import {
   StellarAppKitModal,
   useConnect,
   useSession,
-} from '@saganta/stellar-appkit/react';
-import type { StellarAppKitModalHandle } from '@saganta/stellar-appkit/react';
+} from '@saganta/stellar-appkit-ui-web/react';
+import type { StellarAppKitModalHandle } from '@saganta/stellar-appkit-ui-web/react';
 import { createFreighterConnector } from '@saganta/stellar-appkit';
-import '@saganta/stellar-appkit/ui-web';
+import '@saganta/stellar-appkit-ui-web';
 
 export function App() {
   return (

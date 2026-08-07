@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { useSignTransaction } from '@saganta/stellar-appkit/react';
+import { useSignTransaction } from '@saganta/stellar-appkit-ui-web/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
 import { ConnectGate } from '@/components/connect-gate';
@@ -124,7 +124,7 @@ function SignDemo() {
   );
 }
 
-const CODE = `import { useSignTransaction, useSession } from '@saganta/stellar-appkit/react';
+const CODE = `import { useSignTransaction, useSession } from '@saganta/stellar-appkit-ui-web/react';
 
 function SignButton() {
   const session = useSession();

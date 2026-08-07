@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { usePreviewTransaction, useSignTransaction } from '@saganta/stellar-appkit/react';
+import { usePreviewTransaction, useSignTransaction } from '@saganta/stellar-appkit-ui-web/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
 import { ConnectGate } from '@/components/connect-gate';
@@ -161,7 +161,7 @@ function CustomPreviewDemo() {
 const CODE = `import {
   usePreviewTransaction,
   useSignTransaction,
-} from '@saganta/stellar-appkit/react';
+} from '@saganta/stellar-appkit-ui-web/react';
 
 function CustomPreview() {
   const { sign } = useSignTransaction();

@@ -1,7 +1,7 @@
 'use client';
 
 import { type ReactNode } from 'react';
-import { useConnect, useSession } from '@saganta/stellar-appkit/react';
+import { useConnect, useSession } from '@saganta/stellar-appkit-ui-web/react';
 import { openAppKitModal } from '@/components/appkit-provider';
 
 /**

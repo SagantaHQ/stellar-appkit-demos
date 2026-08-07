@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { useConnect, useAppKit } from '@saganta/stellar-appkit/react';
+import { useConnect, useAppKit } from '@saganta/stellar-appkit-ui-web/react';
 import { NetworkMismatchError } from '@saganta/stellar-appkit';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
@@ -122,7 +122,7 @@ function NetworkDemo() {
   );
 }
 
-const CODE = `import { useConnect } from '@saganta/stellar-appkit/react';
+const CODE = `import { useConnect } from '@saganta/stellar-appkit-ui-web/react';
 import { NetworkMismatchError } from '@saganta/stellar-appkit';
 
 function ConnectButton() {

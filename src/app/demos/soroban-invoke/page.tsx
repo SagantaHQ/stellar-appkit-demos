@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { useSoroban } from '@saganta/stellar-appkit/react';
+import { useSoroban } from '@saganta/stellar-appkit-ui-web/react';
 // Hardcode the Testnet passphrase to avoid importing @stellar/stellar-sdk
 // (which is ~2MB and would blow the Worker size limit).
 // const Networks = { TESTNET: 'Test SDF Network ; September 2015' };
@@ -146,7 +146,7 @@ function InvokeDemo() {
   );
 }
 
-const CODE = `import { useSoroban, useSession } from '@saganta/stellar-appkit/react';
+const CODE = `import { useSoroban, useSession } from '@saganta/stellar-appkit-ui-web/react';
 // Hardcode the Testnet passphrase to avoid importing @stellar/stellar-sdk
 // (which is ~2MB and would blow the Worker size limit).
 // const Networks = { TESTNET: 'Test SDF Network ; September 2015' };

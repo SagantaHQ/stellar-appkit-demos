@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
-import { useSignIn, useSession } from '@saganta/stellar-appkit/react';
+import { useSignIn, useSession } from '@saganta/stellar-appkit-ui-web/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
 
@@ -182,7 +182,7 @@ function SiwsDemo() {
 }
 
 const CODE = `// ---- Client (React) ----
-import { useSignIn, useSession } from '@saganta/stellar-appkit/react';
+import { useSignIn, useSession } from '@saganta/stellar-appkit-ui-web/react';
 
 function SignInButton() {
   const walletSession = useSession();

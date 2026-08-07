@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { useAppKit } from '@saganta/stellar-appkit/react';
+import { useAppKit } from '@saganta/stellar-appkit-ui-web/react';
 import { SorobanConnection } from '@saganta/stellar-appkit';
 // Hardcode the Testnet passphrase to avoid importing @stellar/stellar-sdk
 // (which is ~2MB and would blow the Worker size limit).

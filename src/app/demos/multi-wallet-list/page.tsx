@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
-import { useAppKit } from '@saganta/stellar-appkit/react';
+import { useAppKit } from '@saganta/stellar-appkit-ui-web/react';
 import type { WalletConnector, WalletReachability } from '@saganta/stellar-appkit';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
@@ -121,7 +121,7 @@ function WalletPickerDemo() {
 }
 
 const CODE = `import { useEffect, useState } from 'react';
-import { useAppKit } from '@saganta/stellar-appkit/react';
+import { useAppKit } from '@saganta/stellar-appkit-ui-web/react';
 
 function WalletPicker() {
   const client = useAppKit();

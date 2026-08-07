@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { useSoroban } from '@saganta/stellar-appkit/react';
+import { useSoroban } from '@saganta/stellar-appkit-ui-web/react';
 // Hardcode the Testnet passphrase to avoid importing @stellar/stellar-sdk
 // (which is ~2MB and would blow the Worker size limit).
 // const Networks = { TESTNET: 'Test SDF Network ; September 2015' };
@@ -66,8 +66,8 @@ function TypedDemo() {
     setLoading(true);
     setError(null);
     try {
-      const token = soroban.contract<TokenContract>(TOKEN_CONTRACT, { specEntries: [] });
-      const balance = await token.simulate('balance', { id: address }) as bigint;
+      const token = soroban.contract(TOKEN_CONTRACT, { specEntries: [] });
+      const balance = await token.simulate('balance', { id: address }) ;
       setResult({ method: 'balance', result: balance.toString() });
     } catch (err) {
       setError(String(err));
@@ -80,7 +80,7 @@ function TypedDemo() {
     setLoading(true);
     setError(null);
     try {
-      const token = soroban.contract<TokenContract>(TOKEN_CONTRACT, { specEntries: [] });
+      const token = soroban.contract(TOKEN_CONTRACT, { specEntries: [] });
       const [name, symbol, decimals] = await Promise.all([
         token.simulate('name', {}),
         token.simulate('symbol', {}),
@@ -125,7 +125,7 @@ function TypedDemo() {
   );
 }
 
-const CODE = `import { useSoroban, useSession } from '@saganta/stellar-appkit/react';
+const CODE = `import { useSoroban, useSession } from '@saganta/stellar-appkit-ui-web/react';
 
 interface TokenContract {
   balance(args: { id: string }): Promise<bigint>;
@@ -143,7 +143,7 @@ function TokenDemo() {
   });
 
   // Typed client — method names + arg shapes are checked by TypeScript
-  const token = soroban.contract<TokenContract>('CBETT2CX...', { specEntries });
+  const token = soroban.contract('CBETT2CX...', { specEntries });
 
   async function checkBalance() {
     const balance = await token.simulate('balance', { id: session.address });
