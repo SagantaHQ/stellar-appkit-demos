@@ -68,7 +68,7 @@ function TypedDemo() {
     try {
       const token = soroban.contract(TOKEN_CONTRACT, { specEntries: [] });
       const balance = await token.simulate('balance', { id: address }) ;
-      setResult({ method: 'balance', result: balance.toString() });
+      setResult({ method: 'balance', result: String(balance) });
     } catch (err) {
       setError(String(err));
     } finally {
