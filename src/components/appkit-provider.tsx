@@ -10,6 +10,12 @@ import {
   createAlbedoConnector,
   createXBullConnector,
 } from '@saganta/stellar-appkit';
+// Static import — registers the <saganta-appkit-modal> custom element.
+// This is safe because this component is 'use client' and all demo pages
+// have `export const dynamic = 'force-dynamic'` — the module is never
+// evaluated during SSR. The customElements.define() call at the bottom
+// of connect-modal.js is guarded by `typeof customElements !== 'undefined'`.
+import '@saganta/stellar-appkit/ui-web';
 
 const config: StellarAppKitProviderConfig = {
   network: 'TESTNET',
@@ -19,19 +25,18 @@ const config: StellarAppKitProviderConfig = {
     createXBullConnector(),
   ],
   appMetadata: {
-    name: 'Stellar AppKit Examples',
-    domain: 'stellar-appkit-demos.saganta.com',
-    uri: 'https://stellar-appkit-demos.saganta.com',
+    name: 'Stellar AppKit Demos',
+    domain: 'demos.stellar-appkit.saganta.com',
+    uri: 'https://demos.stellar-appkit.saganta.com',
   },
 };
 
 export function AppKitProvider({ children }: { children: ReactNode }) {
-  // Register the <saganta-appkit-modal> custom element on the client only.
-  // The Web Component class extends HTMLElement, which is undefined during
-  // SSR / build-time prerender — importing it at module top-level would
-  // crash Next.js's static generation. This effect runs only in the browser.
+  // The ui-web module is imported statically above — the custom element
+  // is registered as soon as this module loads in the browser.
+  // No useEffect needed for registration.
   useEffect(() => {
-    import('@saganta/stellar-appkit/ui-web');
+    // Just trigger a restore on mount.
   }, []);
 
   return <StellarAppKitProvider config={config}>{children}</StellarAppKitProvider>;
