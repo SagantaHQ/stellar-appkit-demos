@@ -13,8 +13,8 @@
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
   },
   "dependencies": {
-    "@saganta/stellar-appkit": "^0.2.1",
-    "@saganta/stellar-appkit-siws-verify": "^0.2.1",
+    "@saganta/stellar-appkit": "^0.2.2",
+    "@saganta/stellar-appkit-siws-verify": "^0.2.2",
     "@stellar/stellar-sdk": "^13.0.0",
     "next": "^15.5.0",
     "react": "^19.0.0",

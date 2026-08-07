@@ -18,14 +18,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark');
   const [mounted, setMounted] = useState(false);
 
-  // Read the persisted theme on mount. Default to dark.
+  // Read the persisted theme on mount. Default to dark — don't follow
+  // system prefers-color-scheme, the user explicitly chose dark as default.
   useEffect(() => {
     const stored = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
     if (stored === 'light' || stored === 'dark') {
       setTheme(stored);
-    } else if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      setTheme('light');
     }
+    // No system-preference fallback — dark is always the default.
     setMounted(true);
   }, []);
 
