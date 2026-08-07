@@ -32,7 +32,8 @@
 
 ### UI & Theming
 - [Theming Showcase](https://demos.stellar-appkit.saganta.com/demos/theming-showcase): Every CSS custom property, live preview with presets
-- [Modal Presentation Modes](https://demos.stellar-appkit.saganta.com/demos/modal-modes): Switch between auto / modal / bottomsheet / inline modes + try every WAAPI animation preset (none, fade, scale, scale-blur, slide-up, slide-left, implode)
+- [Modal Presentation Modes](https://demos.stellar-appkit.saganta.com/demos/modal-modes): Switch between auto / modal / bottomsheet / inline modes + try every WAAPI animation preset
+- [Animation Presets](https://demos.stellar-appkit.saganta.com/demos/animations): A focused demo of every WAAPI animation preset — pick separate open and close animations, choose modal or bottomsheet mode
 
 ## Links
 

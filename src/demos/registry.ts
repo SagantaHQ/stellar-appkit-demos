@@ -129,6 +129,15 @@ export const demos: Demo[] = [
     difficulty: 'beginner',
   },
   {
+    slug: 'animations',
+    title: 'Animation Presets',
+    description: 'A focused demo of every WAAPI animation preset — pick separate open and close animations, choose modal or bottomsheet mode, and open the modal to see the transition in action. Includes a preset reference table and code examples.',
+    category: 'ui',
+    tags: ['react', 'modal', 'animation', 'waapi', 'scale-blur', 'slide-up', 'implode'],
+    hasServer: false,
+    difficulty: 'beginner',
+  },
+  {
     slug: 'custom-preview-ui',
     title: 'Custom Transaction Preview',
     description: 'Don\'t want the built-in preview? Build your own with usePreviewTransaction() — receive the decoded operations, risk flags, and fee estimate as reactive state, respond with approve/reject.',
