@@ -6,7 +6,9 @@ export const dynamic = 'force-dynamic';
 import { useState } from 'react';
 import { useAppKit } from '@saganta/stellar-appkit/react';
 import { SorobanConnection } from '@saganta/stellar-appkit';
-import { Networks } from '@stellar/stellar-sdk';
+// Hardcode the Testnet passphrase to avoid importing @stellar/stellar-sdk
+// (which is ~2MB and would blow the Worker size limit).
+// const Networks = { TESTNET: 'Test SDF Network ; September 2015' };
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
 import { ErrorBlock } from '@/components/error-block';
@@ -64,7 +66,7 @@ function FailoverDemo() {
       // connection will fail over from primary to backup on errors.
       const soroban = new SorobanConnection({
         rpcUrls: [PRIMARY_RPC, BACKUP_RPC],
-        networkPassphrase: Networks.TESTNET,
+        networkPassphrase: 'Test SDF Network ; September 2015',
         wallet: client,
       });
       const s = soroban.getFailoverStatus();
@@ -108,7 +110,9 @@ function FailoverDemo() {
 }
 
 const CODE = `import { SorobanConnection } from '@saganta/stellar-appkit';
-import { Networks } from '@stellar/stellar-sdk';
+// Hardcode the Testnet passphrase to avoid importing @stellar/stellar-sdk
+// (which is ~2MB and would blow the Worker size limit).
+// const Networks = { TESTNET: 'Test SDF Network ; September 2015' };
 
 // Construct with rpcUrls (plural) instead of rpcUrl to enable failover
 const soroban = new SorobanConnection({
@@ -116,7 +120,7 @@ const soroban = new SorobanConnection({
     'https://soroban-testnet.stellar.org',
     'https://rpc-backup.example.com',
   ],
-  networkPassphrase: Networks.TESTNET,
+  networkPassphrase: 'Test SDF Network ; September 2015',
   wallet: appkit, // a StellarAppKit instance
   failoverOptions: {
     unhealthyCooldownMs: 30_000,

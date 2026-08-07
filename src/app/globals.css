@@ -1043,3 +1043,19 @@ saganta-appkit-modal[mode="inline"] {
 .code-block__shiki span {
   font-family: var(--font-mono) !important;
 }
+
+/* Prism code block styles */
+.code-block__pre {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  white-space: pre;
+  background: transparent !important;
+  overflow: visible;
+}
+
+.code-block__pre div {
+  display: block;
+}

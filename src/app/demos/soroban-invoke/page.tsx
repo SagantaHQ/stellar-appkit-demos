@@ -5,7 +5,9 @@ export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
 import { useSoroban } from '@saganta/stellar-appkit/react';
-import { Networks } from '@stellar/stellar-sdk';
+// Hardcode the Testnet passphrase to avoid importing @stellar/stellar-sdk
+// (which is ~2MB and would blow the Worker size limit).
+// const Networks = { TESTNET: 'Test SDF Network ; September 2015' };
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
 import { ConnectGate } from '@/components/connect-gate';
@@ -53,7 +55,7 @@ export default function SorobanInvokeDemo() {
 function InvokeDemo() {
   const { invoke, previewInvoke, status, lastResult, error } = useSoroban({
     rpcUrl: RPC_URL,
-    networkPassphrase: Networks.TESTNET,
+    networkPassphrase: 'Test SDF Network ; September 2015',
   });
   const [preview, setPreview] = useState<unknown>(null);
 
@@ -145,13 +147,15 @@ function InvokeDemo() {
 }
 
 const CODE = `import { useSoroban, useSession } from '@saganta/stellar-appkit/react';
-import { Networks } from '@stellar/stellar-sdk';
+// Hardcode the Testnet passphrase to avoid importing @stellar/stellar-sdk
+// (which is ~2MB and would blow the Worker size limit).
+// const Networks = { TESTNET: 'Test SDF Network ; September 2015' };
 
 function TokenBalance() {
   const session = useSession();
   const { invoke, previewInvoke, status, lastResult } = useSoroban({
     rpcUrl: 'https://soroban-testnet.stellar.org',
-    networkPassphrase: Networks.TESTNET,
+    networkPassphrase: 'Test SDF Network ; September 2015',
   });
 
   async function checkBalance() {

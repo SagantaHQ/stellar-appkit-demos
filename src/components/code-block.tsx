@@ -1,20 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { ShikiHighlighter, type Language } from 'react-shiki';
+import { Highlight, themes } from 'prism-react-renderer';
 
 interface CodeBlockProps {
   code: string;
-  language?: Language;
+  language?: string;
   /** Optional filename/title shown in the header bar */
   title?: string;
 }
 
 /**
- * A code block with syntax highlighting (via react-shiki) and a copy button.
+ * A code block with syntax highlighting (via prism-react-renderer) and a copy button.
  *
- * Uses the "github-dark" theme for dark mode and "github-light" for light mode.
- * The theme is selected based on the `dark` class on <html>.
+ * Uses the "vsDark" theme for a sleek dark code viewer. prism-react-renderer
+ * is ~50KB (vs react-shiki's ~10MB+) — critical for Cloudflare Workers' 3 MiB limit.
  */
 export function CodeBlock({ code, language = 'typescript', title }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
@@ -32,7 +32,7 @@ export function CodeBlock({ code, language = 'typescript', title }: CodeBlockPro
   return (
     <div className="code-block">
       <div className="code-block__header">
-        <span className="code-block__lang">{title ?? String(language)}</span>
+        <span className="code-block__lang">{title ?? language}</span>
         <button
           className="code-block__copy"
           onClick={copy}
@@ -53,14 +53,19 @@ export function CodeBlock({ code, language = 'typescript', title }: CodeBlockPro
         </button>
       </div>
       <div className="code-block__body">
-        <ShikiHighlighter
-          language={language}
-          theme="github-dark"
-          addDefaultStyles={false}
-          className="code-block__shiki"
-        >
-          {code.trim()}
-        </ShikiHighlighter>
+        <Highlight theme={themes.vsDark} code={code.trim()} language={language as any}>
+          {({ className, style, tokens, getLineProps, getTokenProps }) => (
+            <pre className={`${className} code-block__pre`} style={style}>
+              {tokens.map((line, i) => (
+                <div key={i} {...getLineProps({ line })}>
+                  {line.map((token, key) => (
+                    <span key={key} {...getTokenProps({ token })} />
+                  ))}
+                </div>
+              ))}
+            </pre>
+          )}
+        </Highlight>
       </div>
     </div>
   );

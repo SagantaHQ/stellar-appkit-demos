@@ -5,7 +5,9 @@ export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
 import { useSoroban } from '@saganta/stellar-appkit/react';
-import { Networks } from '@stellar/stellar-sdk';
+// Hardcode the Testnet passphrase to avoid importing @stellar/stellar-sdk
+// (which is ~2MB and would blow the Worker size limit).
+// const Networks = { TESTNET: 'Test SDF Network ; September 2015' };
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
 import { ConnectGate } from '@/components/connect-gate';
@@ -54,7 +56,7 @@ type TokenContract = Record<string, (args: object) => Promise<unknown>>;
 function TypedDemo() {
   const { soroban } = useSoroban({
     rpcUrl: 'https://soroban-testnet.stellar.org',
-    networkPassphrase: Networks.TESTNET,
+    networkPassphrase: 'Test SDF Network ; September 2015',
   });
   const [result, setResult] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(false);
@@ -137,7 +139,7 @@ function TokenDemo() {
   const session = useSession();
   const { soroban } = useSoroban({
     rpcUrl: 'https://soroban-testnet.stellar.org',
-    networkPassphrase: Networks.TESTNET,
+    networkPassphrase: 'Test SDF Network ; September 2015',
   });
 
   // Typed client — method names + arg shapes are checked by TypeScript
