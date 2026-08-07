@@ -73,9 +73,11 @@ function buildConnectors(): WalletConnector[] {
           url: 'https://demos.stellar-appkit.saganta.com',
           icons: ['https://demos.stellar-appkit.saganta.com/icon.png'],
         },
+        // onUri is OPTIONAL — the modal renders the QR code automatically
+        // using better-qr. We set it here only because the /demos/walletconnect
+        // page shows its own QR (using qrcode.react) for demonstration purposes.
+        // If you're just using the modal, you can omit onUri entirely.
         onUri: (uri) => {
-          // Forward the URI to whatever listener is currently registered
-          // (the WalletConnect demo page sets this when it mounts)
           if (uriListener) uriListener(uri);
         },
         networkPassphrase: Networks.TESTNET,
