@@ -952,3 +952,94 @@ saganta-appkit-modal[mode="inline"] {
   max-width: 320px;
   margin: 0 0 1rem;
 }
+
+/* ============================================================================
+   Code block — syntax highlighted with copy button
+   ========================================================================== */
+
+.code-block {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin: 0;
+  background: #0d1117;
+}
+
+.code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.875rem;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+}
+
+.code-block__lang {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.code-block__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid #30363d;
+  background: transparent;
+  color: #8b949e;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.code-block__copy:hover {
+  background: #21262d;
+  color: #c9d1d9;
+  border-color: #484f58;
+}
+
+.code-block__body {
+  overflow-x: auto;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.code-block__body::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.code-block__body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.code-block__body::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 4px;
+}
+
+.code-block__body::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+.code-block__shiki {
+  display: block;
+  padding: 1rem 1.25rem;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  white-space: pre;
+  background: transparent !important;
+}
+
+.code-block__shiki code,
+.code-block__shiki span {
+  font-family: var(--font-mono) !important;
+}

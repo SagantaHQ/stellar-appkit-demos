@@ -4,8 +4,8 @@
 export const dynamic = 'force-dynamic';
 
 import { useRef, useState } from 'react';
-import { StellarAppKitModal, useConnect } from '@saganta/stellar-appkit/react';
-import type { StellarAppKitModalHandle } from '@saganta/stellar-appkit/react';
+import { useConnect, useAppKit } from '@saganta/stellar-appkit/react';
+import type { StellarAppKit } from '@saganta/stellar-appkit';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 
 interface ThemeState {
@@ -38,7 +38,24 @@ const PRESETS: Record<string, ThemeState> = {
 
 export default function ThemingShowcaseDemo() {
   const [theme, setTheme] = useState<ThemeState>(DEFAULT_THEME);
-  const modalRef = useRef<StellarAppKitModalHandle>(null);
+  const client = useAppKit();
+  const modalElRef = useRef<HTMLElement & { client: StellarAppKit | null; open?: () => Promise<void> } | null>(null);
+
+  const setModalRef = (el: HTMLElement & { client: StellarAppKit | null; open?: () => Promise<void> } | null) => {
+    modalElRef.current = el;
+    if (el && !el.client) {
+      el.client = client;
+    }
+  };
+
+  const openModal = async () => {
+    const el = modalElRef.current;
+    if (!el) return;
+    if (!el.client) {
+      el.client = client;
+    }
+    await el.open?.();
+  };
 
   const cssVars = {
     '--sak-color-bg': theme.bg,
@@ -84,7 +101,7 @@ ${Object.entries(cssVars).filter(([, v]) => typeof v === 'string').map(([k, v]) 
               <input className="field__input" value={theme.radiusLg} onChange={(e) => setTheme({ ...theme, radiusLg: e.target.value })} />
             </div>
 
-            <button className="btn btn--primary" onClick={() => modalRef.current?.open()}>
+            <button className="btn btn--primary" onClick={openModal}>
               Open modal with this theme
             </button>
           </div>
@@ -111,7 +128,12 @@ ${Object.entries(cssVars).filter(([, v]) => typeof v === 'string').map(([k, v]) 
         </DemoPanel>
       </div>
 
-      <StellarAppKitModal ref={modalRef} mode="auto" style={cssVars} />
+      <saganta-appkit-modal
+        ref={setModalRef as never}
+        mode="auto"
+        theme="dark"
+        style={cssVars}
+      />
     </DemoPageLayout>
   );
 }

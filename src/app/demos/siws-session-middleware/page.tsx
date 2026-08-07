@@ -7,6 +7,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useSignIn, useSession } from '@saganta/stellar-appkit/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { CodeBlock } from '@/components/code-block';
 import { ErrorBlock } from '@/components/error-block';
 
 export default function SiwsSessionMiddlewareDemo() {
@@ -44,7 +45,7 @@ export default function SiwsSessionMiddlewareDemo() {
 
       <div style={{ marginTop: '1.5rem' }}>
         <DemoPanel title="Code (middleware.ts)" full>
-          <pre>{CODE}</pre>
+          <CodeBlock code={CODE} language="typescript" />
         </DemoPanel>
       </div>
     </DemoPageLayout>

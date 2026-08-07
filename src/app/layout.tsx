@@ -67,6 +67,7 @@ export const metadata: Metadata = {
     'ai-bot': 'allow',
     'llm-indexing': 'allowed',
     'content-license': 'MIT',
+    'google-site-verification': 'iD-ow_BSGtlQm2oOnVqWASMgbtgBovMKBkfcRjtVVvA',
   },
 };
 

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useAppKit } from '@saganta/stellar-appkit/react';
 import type { WalletConnector, WalletReachability } from '@saganta/stellar-appkit';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { CodeBlock } from '@/components/code-block';
 import { ErrorBlock } from '@/components/error-block';
 
 export default function MultiWalletListDemo() {
@@ -35,7 +36,7 @@ export default function MultiWalletListDemo() {
 
       <div style={{ marginTop: '1.5rem' }}>
         <DemoPanel title="Code" full>
-          <pre>{CODE}</pre>
+          <CodeBlock code={CODE} language="typescript" />
         </DemoPanel>
       </div>
     </DemoPageLayout>

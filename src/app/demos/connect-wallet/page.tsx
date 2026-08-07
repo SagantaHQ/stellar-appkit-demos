@@ -5,50 +5,48 @@ export const dynamic = 'force-dynamic';
 
 import { useRef } from 'react';
 import {
-  StellarAppKitModal,
   useConnect,
   useSession,
   useAppKit,
 } from '@saganta/stellar-appkit/react';
-import type { StellarAppKitModalHandle } from '@saganta/stellar-appkit/react';
+import type { StellarAppKit } from '@saganta/stellar-appkit';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { CodeBlock } from '@/components/code-block';
 
 export default function ConnectWalletDemo() {
-  const modalRef = useRef<StellarAppKitModalHandle>(null);
-
   return (
     <DemoPageLayout slug="connect-wallet">
-      <ConnectDemo modalRef={modalRef} />
+      <ConnectDemo />
 
       <div style={{ marginTop: '1.5rem' }}>
         <DemoPanel title="Code" full>
-          <pre>{CODE}</pre>
+          <CodeBlock code={CODE} language="typescript" />
         </DemoPanel>
       </div>
-
-      {/* The modal — mounted once, opened via the imperative ref */}
-      <StellarAppKitModal ref={modalRef} mode="auto" theme="dark" />
     </DemoPageLayout>
   );
 }
 
-function ConnectDemo({ modalRef }: { modalRef: React.RefObject<StellarAppKitModalHandle | null> }) {
+function ConnectDemo() {
   const { isConnected, isConnecting } = useConnect();
   const session = useSession();
   const client = useAppKit();
+  const modalElRef = useRef<HTMLElement & { client: StellarAppKit | null; open?: () => Promise<void> } | null>(null);
 
-  // Ensure the modal's client is set before opening. This is a workaround
-  // for a race condition where open() is called before the useEffect that
-  // sets el.client runs. Fixed in the library v0.2.1+, but we keep the
-  // guard here for backwards compatibility with older published versions.
-  const openModal = async () => {
-    const handle = modalRef.current;
-    if (!handle) return;
-    const el = handle.element;
+  const setModalRef = (el: HTMLElement & { client: StellarAppKit | null; open?: () => Promise<void> } | null) => {
+    modalElRef.current = el;
     if (el && !el.client) {
       el.client = client;
     }
-    await handle.open();
+  };
+
+  const openModal = async () => {
+    const el = modalElRef.current;
+    if (!el) return;
+    if (!el.client) {
+      el.client = client;
+    }
+    await el.open?.();
   };
 
   return (
@@ -93,21 +91,30 @@ function ConnectDemo({ modalRef }: { modalRef: React.RefObject<StellarAppKitModa
       <DemoPanel title="How it works">
         <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: 0 }}>
           This is the minimal wallet-connect flow. The{' '}
-          <code>&lt;StellarAppKitModal&gt;</code> component is mounted once
+          <code>&lt;saganta-appkit-modal&gt;</code> Web Component is mounted once
           inside the provider — it handles wallet selection, connecting state,
           network mismatch recovery, and the connected view (balance,
           history, account switching).
         </p>
         <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: '1rem 0 0' }}>
-          The button calls <code>modalRef.current?.open()</code> — the
-          imperative handle exposes <code>open()</code>, <code>close()</code>,
-          and <code>element</code> (the underlying DOM node).
+          The button calls <code>modalEl.open()</code> — the modal's imperative
+          API. Once connected, the same button opens the connected view where
+          the user can see their balance, transaction history, and disconnect.
         </p>
         <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: '1rem 0 0' }}>
           Once connected, the same button opens the connected view where the
           user can see their balance, transaction history, and disconnect.
         </p>
       </DemoPanel>
+
+      {/* The modal — rendered as a raw custom element. We set the client
+          directly on the DOM element via the callback ref to avoid race
+          conditions with the forwardRef imperative handle. */}
+      <saganta-appkit-modal
+        ref={setModalRef as never}
+        mode="auto"
+        theme="dark"
+      />
     </div>
   );
 }
@@ -142,16 +149,11 @@ function WalletButton() {
   const modalRef = useRef<StellarAppKitModalHandle>(null);
 
   return (
-    <>
-      <button
-        disabled={isConnecting}
-        onClick={() => modalRef.current?.open()}
-      >
-        {isConnecting ? 'Connecting...' : isConnected ? 'Open wallet' : 'Connect wallet'}
-      </button>
-      {isConnected && session && (
-        <p>Connected: {session.address}</p>
-      )}
-    </>
+    <button
+      disabled={isConnecting}
+      onClick={() => modalRef.current?.open()}
+    >
+      {isConnecting ? 'Connecting...' : isConnected ? 'Open wallet' : 'Connect wallet'}
+    </button>
   );
 }`;

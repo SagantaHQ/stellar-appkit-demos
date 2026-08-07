@@ -8,6 +8,7 @@ import { useAppKit } from '@saganta/stellar-appkit/react';
 import { SorobanConnection } from '@saganta/stellar-appkit';
 import { Networks } from '@stellar/stellar-sdk';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { CodeBlock } from '@/components/code-block';
 import { ErrorBlock } from '@/components/error-block';
 
 const PRIMARY_RPC = 'https://soroban-testnet.stellar.org';
@@ -42,7 +43,7 @@ export default function SorobanFailoverDemo() {
 
       <div style={{ marginTop: '1.5rem' }}>
         <DemoPanel title="Code" full>
-          <pre>{CODE}</pre>
+          <CodeBlock code={CODE} language="typescript" />
         </DemoPanel>
       </div>
     </DemoPageLayout>

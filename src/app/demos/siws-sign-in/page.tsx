@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic';
 import { useEffect, useState } from 'react';
 import { useSignIn, useSession } from '@saganta/stellar-appkit/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { CodeBlock } from '@/components/code-block';
 
 export default function SiwsSignInDemo() {
   return (
@@ -38,7 +39,7 @@ export default function SiwsSignInDemo() {
 
       <div style={{ marginTop: '1.5rem' }}>
         <DemoPanel title="Code" full>
-          <pre>{CODE}</pre>
+          <CodeBlock code={CODE} language="typescript" />
         </DemoPanel>
       </div>
     </DemoPageLayout>

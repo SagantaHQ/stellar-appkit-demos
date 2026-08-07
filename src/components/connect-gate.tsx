@@ -2,55 +2,51 @@
 
 import { useRef, useState, useEffect, type ReactNode } from 'react';
 import {
-  StellarAppKitModal,
   useConnect,
   useSession,
   useAppKit,
 } from '@saganta/stellar-appkit/react';
-import type { StellarAppKitModalHandle } from '@saganta/stellar-appkit/react';
+import type { StellarAppKit } from '@saganta/stellar-appkit';
 
 /**
  * A gate that shows a "Connect wallet" button until the user is connected,
- * then renders the demo content. This is the UX pattern for demos that
- * require a connected wallet — instead of showing an empty state that says
- * "Connect a wallet first", the user sees a prominent connect button
- * right in the demo panel.
+ * then renders the demo content.
  *
- * Usage:
- *   <ConnectGate>
- *     {(session) => <MyDemo session={session} />}
- *   </ConnectGate>
- *
- * The modal is mounted inside the gate (hidden), so there's no need for
- * the demo itself to mount a <StellarAppKitModal>.
+ * The modal is rendered as a raw <saganta-appkit-modal> element (not via
+ * the <StellarAppKitModal> React wrapper) so we can set the client directly
+ * on the DOM element via a callback ref. This avoids the race condition
+ * where the forwardRef imperative handle isn't ready before open() is called.
  */
 export function ConnectGate({ children }: { children: (session: NonNullable<ReturnType<typeof useSession>>) => ReactNode }) {
   const { isConnected, isConnecting } = useConnect();
   const session = useSession();
   const client = useAppKit();
-  const modalRef = useRef<StellarAppKitModalHandle>(null);
-  const [modalReady, setModalReady] = useState(false);
+  const modalElRef = useRef<HTMLElement & { client: StellarAppKit | null; open?: () => Promise<void>; close?: () => void } | null>(null);
 
-  // Ensure the modal's client is set as soon as the host element mounts.
-  // This is a workaround for the race condition where open() is called
-  // before the useEffect that sets el.client runs.
-  useEffect(() => {
-    if (!modalReady) return;
-    const el = modalRef.current?.element;
+  // Set the client on the DOM element as soon as it mounts.
+  const setModalRef = (el: HTMLElement & { client: StellarAppKit | null; open?: () => Promise<void>; close?: () => void } | null) => {
+    modalElRef.current = el;
     if (el && !el.client) {
       el.client = client;
     }
-  }, [modalReady, client]);
+  };
+
+  // Also set the client whenever it changes (e.g. on hot reload).
+  useEffect(() => {
+    const el = modalElRef.current;
+    if (el && !el.client) {
+      el.client = client;
+    }
+  }, [client]);
 
   const openModal = async () => {
-    const handle = modalRef.current;
-    if (!handle) return;
-    // Ensure client is set before opening — workaround for the race condition
-    const el = handle.element;
-    if (el && !el.client) {
+    const el = modalElRef.current;
+    if (!el) return;
+    // Ensure the client is set before opening.
+    if (!el.client) {
       el.client = client;
     }
-    await handle.open();
+    await el.open?.();
   };
 
   if (!isConnected || !session) {
@@ -74,11 +70,11 @@ export function ConnectGate({ children }: { children: (session: NonNullable<Retu
         >
           {isConnecting ? 'Connecting...' : 'Connect wallet'}
         </button>
-        <StellarAppKitModal
-          ref={(h) => {
-            modalRef.current = h;
-            setModalReady(!!h);
-          }}
+        {/* Render the modal as a raw custom element. We set the client
+            directly on the DOM element via the callback ref to avoid
+            race conditions with the forwardRef imperative handle. */}
+        <saganta-appkit-modal
+          ref={setModalRef as never}
           mode="auto"
           theme="dark"
         />

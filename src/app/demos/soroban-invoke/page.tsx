@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useSoroban } from '@saganta/stellar-appkit/react';
 import { Networks } from '@stellar/stellar-sdk';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { CodeBlock } from '@/components/code-block';
 import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
@@ -42,7 +43,7 @@ export default function SorobanInvokeDemo() {
 
       <div style={{ marginTop: '1.5rem' }}>
         <DemoPanel title="Code" full>
-          <pre>{CODE}</pre>
+          <CodeBlock code={CODE} language="typescript" />
         </DemoPanel>
       </div>
     </DemoPageLayout>

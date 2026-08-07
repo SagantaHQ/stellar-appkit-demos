@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic';
 import { useState } from 'react';
 import { useSignTransaction } from '@saganta/stellar-appkit/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { CodeBlock } from '@/components/code-block';
 import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
@@ -38,7 +39,7 @@ export default function SignTransactionDemo() {
 
       <div style={{ marginTop: '1.5rem' }}>
         <DemoPanel title="Code" full>
-          <pre>{CODE}</pre>
+          <CodeBlock code={CODE} language="typescript" />
         </DemoPanel>
       </div>
     </DemoPageLayout>
