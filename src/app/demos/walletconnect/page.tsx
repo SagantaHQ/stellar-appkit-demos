@@ -277,8 +277,8 @@ const SETUP_CODE = `import {
   StellarAppKit,
   createWalletConnectConnector,
   defaultConnectors,
+  Networks,
 } from '@saganta/stellar-appkit';
-import { Networks } from '@stellar/stellar-sdk';
 
 const appkit = new StellarAppKit({
   network: 'TESTNET',
@@ -292,13 +292,9 @@ const appkit = new StellarAppKit({
         url: 'https://app.example.com',
         icons: ['https://app.example.com/icon.png'],
       },
-      onUri: (uri) => {
-        // Render the URI as a QR code (desktop) or deep link (mobile).
-        // Use a library like qrcode.react:
-        //   <QRCodeSVG value={uri} size={256} />
-        setQrUri(uri);
-      },
       networkPassphrase: Networks.TESTNET,
+      // onUri is optional — the modal renders the QR code automatically
+      // using better-qr. Only set it if you're building your own UI.
     }),
   ],
   appMetadata: { name: 'Example App' },

@@ -12,12 +12,12 @@ import {
   createXBullConnector,
   createLedgerConnector,
   createWalletConnectConnector,
+  Networks,
   type WalletConnector,
 } from '@saganta/stellar-appkit';
 import type { StellarAppKit } from '@saganta/stellar-appkit';
 // Static import — registers the <stellar-appkit-modal> custom element.
 import '@saganta/stellar-appkit-ui-web';
-import { Networks } from '@stellar/stellar-sdk';
 
 /**
  * WalletConnect project ID from Cloudflare env (NEXT_PUBLIC_REOWN_PROJECT_ID).
