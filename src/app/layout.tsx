@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ThemeProvider } from '@/components/theme-provider';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import { GoogleAnalytics } from '@/components/google-analytics';
 import './globals.css';
 
 const SITE_URL = 'https://demos.stellar-appkit.saganta.com';
@@ -182,6 +183,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <GoogleAnalytics />
         <ThemeProvider>
           <div className="app-shell">
             <SiteHeader />
