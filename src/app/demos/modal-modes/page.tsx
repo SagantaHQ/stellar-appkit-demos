@@ -119,7 +119,7 @@ export default function ModalModesDemo() {
         <div style={{ marginTop: '1.5rem' }}>
           <DemoPanel title="Inline modal (embedded)" full>
             <div style={{ minHeight: '420px' }}>
-              <saganta-appkit-modal
+              <stellar-appkit-modal
                 ref={setModalRef as never}
                 mode="inline"
                 theme="dark"
@@ -128,7 +128,7 @@ export default function ModalModesDemo() {
           </DemoPanel>
         </div>
       ) : (
-        <saganta-appkit-modal
+        <stellar-appkit-modal
           ref={setModalRef as never}
           mode={mode}
           theme="dark"

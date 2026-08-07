@@ -48,15 +48,26 @@ export default function SignTransactionDemo() {
 
 const RECIPIENT = 'GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q3IY7ZP4PAOMM43YA'; // well-known Testnet faucet
 const AMOUNT = '1';
+const HORIZON_TESTNET = 'https://horizon-testnet.stellar.org';
 
 function SignDemo() {
   const { sign, isSigning, data, error } = useSignTransaction();
   const [xdr, setXdr] = useState<string>('');
+  const [buildError, setBuildError] = useState<string | null>(null);
+  const [isBuilding, setIsBuilding] = useState(false);
 
   const buildAndSign = async (session: { address: string }) => {
+    setBuildError(null);
+    setIsBuilding(true);
     try {
       const sdk = await import('@stellar/stellar-sdk');
-      const account = await new sdk.rpc.Server('https://soroban-testnet.stellar.org').getAccount(session.address);
+      // Use Horizon (not Soroban RPC) to load the account — Horizon is the
+      // canonical source for account sequence numbers for classic transactions.
+      // Soroban RPC's getAccount only works for accounts that have interacted
+      // with Soroban, which excludes freshly-created Testnet accounts.
+      const horizon = new sdk.Horizon.Server(HORIZON_TESTNET);
+      const account = await horizon.loadAccount(session.address);
+
       const tx = new sdk.TransactionBuilder(account, {
         fee: '100',
         networkPassphrase: sdk.Networks.TESTNET,
@@ -72,7 +83,14 @@ function SignDemo() {
       setXdr(tx.toXDR());
       await sign(tx.toXDR());
     } catch (err) {
-      console.error(err);
+      console.error('[sign-transaction demo] build/sign error:', err);
+      const msg = err instanceof Error ? err.message : String(err);
+      // Extract the useful part of Stellar SDK errors (they often wrap the
+      // real message in a longer "TransactionBuilder: ..." prefix).
+      const cleanMsg = msg.replace(/^TransactionBuilder:\s*/i, '');
+      setBuildError(cleanMsg);
+    } finally {
+      setIsBuilding(false);
     }
   };
 
@@ -92,9 +110,9 @@ function SignDemo() {
       <button
         className="btn btn--primary"
         onClick={() => buildAndSign(session)}
-        disabled={isSigning}
+        disabled={isSigning || isBuilding}
       >
-        {isSigning ? 'Check your wallet...' : 'Build & sign transaction'}
+        {isBuilding ? 'Building transaction...' : isSigning ? 'Check your wallet...' : 'Build & sign transaction'}
       </button>
 
       {xdr && (
@@ -117,6 +135,12 @@ function SignDemo() {
         </>
       )}
 
+      {buildError && (
+        <div className="result-block result-block--error" style={{ marginTop: '1rem' }}>
+          <strong>Build error:</strong> {buildError}
+        </div>
+      )}
+
       <ErrorBlock error={error} style={{ marginTop: '1rem' }} />
     </div>
       )}
@@ -132,8 +156,9 @@ function SignButton() {
 
   async function handleSign() {
     const sdk = await import('@stellar/stellar-sdk');
-    const account = await new sdk.rpc.Server('https://soroban-testnet.stellar.org')
-      .getAccount(session.address);
+    // Use Horizon to load the account (not Soroban RPC).
+    const account = await new sdk.Horizon.Server('https://horizon-testnet.stellar.org')
+      .loadAccount(session.address);
 
     const tx = new sdk.TransactionBuilder(account, {
       fee: '100',

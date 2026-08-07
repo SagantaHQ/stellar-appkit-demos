@@ -4,7 +4,7 @@ export function SiteFooter() {
       <div className="site-footer__inner">
         <p>
           Built with{' '}
-          <a href="https://github.com/SagantaHQ/stellar-appkit" target="_blank" rel="noreferrer">
+          <a href="https://github.com/sagantaHQ/stellar-appkit" target="_blank" rel="noreferrer">
             Stellar AppKit
           </a>{' '}
           ·{' '}
@@ -18,7 +18,7 @@ export function SiteFooter() {
         </p>
         <p className="site-footer__meta">
           Network: Stellar Testnet · MIT License ·{' '}
-          <a href="https://github.com/SagantaHQ/stellar-appkit-demos" target="_blank" rel="noreferrer">
+          <a href="https://github.com/sagantaHQ/stellar-appkit-demos" target="_blank" rel="noreferrer">
             Source
           </a>
         </p>

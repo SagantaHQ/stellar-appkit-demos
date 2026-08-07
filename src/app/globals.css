@@ -914,7 +914,7 @@ html.light .result-block--success {
 }
 
 /* Inline stellar-appkit modal needs explicit height in inline mode */
-saganta-appkit-modal[mode="inline"] {
+stellar-appkit-modal[mode="inline"] {
   display: block;
   min-height: 420px;
 }

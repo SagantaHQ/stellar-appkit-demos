@@ -3,7 +3,7 @@
 > Live, copy-pasteable demos of @saganta/stellar-appkit — 14 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
 >
 > URL: https://demos.stellar-appkit.saganta.com
-> Library: https://github.com/SagantaHQ/stellar-appkit
+> Library: https://github.com/sagantaHQ/stellar-appkit
 > Docs: https://stellar-appkit.saganta.com
 > npm: @saganta/stellar-appkit
 > License: MIT
@@ -36,7 +36,7 @@
 
 ## Links
 
-- [Library GitHub](https://github.com/SagantaHQ/stellar-appkit)
+- [Library GitHub](https://github.com/sagantaHQ/stellar-appkit)
 - [Documentation](https://stellar-appkit.saganta.com)
-- [Demos source code](https://github.com/SagantaHQ/stellar-appkit-demos)
+- [Demos source code](https://github.com/sagantaHQ/stellar-appkit-demos)
 - [npm: @saganta/stellar-appkit](https://www.npmjs.com/package/@saganta/stellar-appkit)

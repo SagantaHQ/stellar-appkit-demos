@@ -85,7 +85,7 @@ ${Object.entries(cssVars).filter(([, v]) => typeof v === 'string').map(([k, v]) 
 
             <button className="btn btn--primary" onClick={() => {
               // Apply the theme CSS vars to the persistent modal element
-              const modal = document.querySelector<HTMLElement>('saganta-appkit-modal');
+              const modal = document.querySelector<HTMLElement>('stellar-appkit-modal');
               if (modal) {
                 Object.entries(cssVars).forEach(([k, v]) => {
                   modal.style.setProperty(k, v as string);
@@ -114,7 +114,7 @@ ${Object.entries(cssVars).filter(([, v]) => typeof v === 'string').map(([k, v]) 
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: '1rem 0 0' }}>
             The snippet on the right is the exact CSS you'd paste into your own
             app — copy it into a global stylesheet targeting{' '}
-            <code>saganta-appkit-modal</code>.
+            <code>stellar-appkit-modal</code>.
           </p>
         </DemoPanel>
       </div>

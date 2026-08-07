@@ -12,7 +12,7 @@ import {
   createXBullConnector,
 } from '@saganta/stellar-appkit';
 import type { StellarAppKit } from '@saganta/stellar-appkit';
-// Static import — registers the <saganta-appkit-modal> custom element.
+// Static import — registers the <stellar-appkit-modal> custom element.
 import '@saganta/stellar-appkit-ui-web';
 
 // NOTE: As of @saganta/stellar-appkit v1.0.3, `connectors` is optional —
@@ -43,7 +43,7 @@ export function AppKitProvider({ children }: { children: ReactNode }) {
 }
 
 /**
- * Renders a persistent <saganta-appkit-modal> and sets its client from context.
+ * Renders a persistent <stellar-appkit-modal> and sets its client from context.
  * This modal stays mounted for the entire session — it handles:
  * - Wallet selection (when user clicks "Connect wallet" in ConnectGate)
  * - Transaction preview (when user signs — onPreviewTransaction is wired here)
@@ -70,7 +70,7 @@ function PersistentModal() {
   }, [client]);
 
   return (
-    <saganta-appkit-modal
+    <stellar-appkit-modal
       ref={setModalRef as never}
       mode="auto"
       theme="dark"
@@ -84,7 +84,7 @@ function PersistentModal() {
  * child components to open it. We use a simple DOM query.
  */
 export function openAppKitModal() {
-  const el = document.querySelector<HTMLElement & { open?: () => Promise<void> }>('saganta-appkit-modal');
+  const el = document.querySelector<HTMLElement & { open?: () => Promise<void> }>('stellar-appkit-modal');
   if (el) {
     el.open?.();
   }

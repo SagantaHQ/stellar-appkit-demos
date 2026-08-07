@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'SEP-43', 'SEP-0053', 'React', 'Next.js', 'Cloudflare', 'TypeScript',
     'blockchain', 'crypto', 'dApp', 'smart contract', 'transaction preview',
   ],
-  authors: [{ name: 'Saganta', url: 'https://github.com/SagantaHQ' }],
+  authors: [{ name: 'Saganta', url: 'https://github.com/sagantaHQ' }],
   creator: 'Saganta',
   publisher: 'Saganta',
   applicationName: 'Stellar AppKit Demos',
@@ -91,25 +91,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               author: {
                 '@type': 'Organization',
                 name: 'Saganta',
-                url: 'https://github.com/SagantaHQ',
+                url: 'https://github.com/sagantaHQ',
               },
               publisher: {
                 '@type': 'Organization',
                 name: 'Saganta',
-                url: 'https://github.com/SagantaHQ',
+                url: 'https://github.com/sagantaHQ',
               },
               offers: {
                 '@type': 'Offer',
                 price: '0',
                 priceCurrency: 'USD',
               },
-              license: 'https://github.com/SagantaHQ/stellar-appkit/blob/main/LICENSE',
+              license: 'https://github.com/sagantaHQ/stellar-appkit/blob/main/LICENSE',
               isPartOf: {
                 '@type': 'SoftwareApplication',
                 name: 'Stellar AppKit',
                 url: 'https://stellar-appkit.saganta.com',
               },
-              codeRepository: 'https://github.com/SagantaHQ/stellar-appkit-demos',
+              codeRepository: 'https://github.com/sagantaHQ/stellar-appkit-demos',
             }),
           }}
         />

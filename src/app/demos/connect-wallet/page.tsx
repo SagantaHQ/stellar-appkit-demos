@@ -67,7 +67,7 @@ function ConnectDemo() {
 
       <DemoPanel title="How it works">
         <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: 0 }}>
-          The <code>&lt;saganta-appkit-modal&gt;</code> Web Component is mounted
+          The <code>&lt;stellar-appkit-modal&gt;</code> Web Component is mounted
           persistently at the provider level — it handles wallet selection,
           connecting state, network mismatch recovery, the connected view
           (balance, history, account switching), and the transaction preview

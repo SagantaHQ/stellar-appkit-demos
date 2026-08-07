@@ -31,7 +31,7 @@ export function SiteHeader() {
             Docs
           </a>
           <a
-            href="https://github.com/SagantaHQ/stellar-appkit"
+            href="https://github.com/sagantaHQ/stellar-appkit"
             target="_blank"
             rel="noreferrer"
             className="site-nav__link"

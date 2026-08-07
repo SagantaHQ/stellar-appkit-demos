@@ -2,10 +2,10 @@
 
 **Live at [demos.stellar-appkit.saganta.com](https://demos.stellar-appkit.saganta.com)**
 
-Live, copy-pasteable demos of [`@saganta/stellar-appkit`](https://github.com/SagantaHQ/stellar-appkit) — wallet connection, transaction signing, Soroban contract calls, and Sign-In With Stellar.
+Live, copy-pasteable demos of [`@saganta/stellar-appkit`](https://github.com/sagantaHQ/stellar-appkit) — wallet connection, transaction signing, Soroban contract calls, and Sign-In With Stellar.
 
 - **Docs:** [stellar-appkit.saganta.com](https://stellar-appkit.saganta.com)
-- **Library:** [github.com/SagantaHQ/stellar-appkit](https://github.com/SagantaHQ/stellar-appkit)
+- **Library:** [github.com/sagantaHQ/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit)
 - **npm:** [@saganta/stellar-appkit](https://www.npmjs.com/package/@saganta/stellar-appkit)
 
 Built with **Next.js 15** + **OpenNext for Cloudflare** (deployed on Cloudflare Workers).
@@ -120,8 +120,8 @@ All demos run on **Stellar Testnet**. Connect a wallet with Testnet funds — ge
 
 - [Next.js 15](https://nextjs.org) (App Router, React 19)
 - [OpenNext for Cloudflare](https://opennext.js.org/cloudflare) — runs Next.js on Cloudflare Workers
-- [@saganta/stellar-appkit](https://github.com/SagantaHQ/stellar-appkit) v0.2.0
-- [@saganta/stellar-appkit-siws-verify](https://github.com/SagantaHQ/stellar-appkit) v0.2.0
+- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v0.2.0
+- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v0.2.0
 - [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config, no `tailwind.config.js`)
 
 ## License
