@@ -3,9 +3,9 @@
 // Force dynamic rendering — the modal uses HTMLElement which is undefined during SSR.
 export const dynamic = 'force-dynamic';
 
-import { useRef, useState } from 'react';
-import { useConnect, useAppKit } from '@saganta/stellar-appkit/react';
-import type { StellarAppKit } from '@saganta/stellar-appkit';
+import { useState } from 'react';
+import { useConnect } from '@saganta/stellar-appkit/react';
+import { openAppKitModal } from '@/components/appkit-provider';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 
 interface ThemeState {
@@ -38,24 +38,6 @@ const PRESETS: Record<string, ThemeState> = {
 
 export default function ThemingShowcaseDemo() {
   const [theme, setTheme] = useState<ThemeState>(DEFAULT_THEME);
-  const client = useAppKit();
-  const modalElRef = useRef<HTMLElement & { client: StellarAppKit | null; open?: () => Promise<void> } | null>(null);
-
-  const setModalRef = (el: HTMLElement & { client: StellarAppKit | null; open?: () => Promise<void> } | null) => {
-    modalElRef.current = el;
-    if (el && !el.client) {
-      el.client = client;
-    }
-  };
-
-  const openModal = async () => {
-    const el = modalElRef.current;
-    if (!el) return;
-    if (!el.client) {
-      el.client = client;
-    }
-    await el.open?.();
-  };
 
   const cssVars = {
     '--sak-color-bg': theme.bg,
@@ -101,7 +83,16 @@ ${Object.entries(cssVars).filter(([, v]) => typeof v === 'string').map(([k, v]) 
               <input className="field__input" value={theme.radiusLg} onChange={(e) => setTheme({ ...theme, radiusLg: e.target.value })} />
             </div>
 
-            <button className="btn btn--primary" onClick={openModal}>
+            <button className="btn btn--primary" onClick={() => {
+              // Apply the theme CSS vars to the persistent modal element
+              const modal = document.querySelector<HTMLElement>('saganta-appkit-modal');
+              if (modal) {
+                Object.entries(cssVars).forEach(([k, v]) => {
+                  modal.style.setProperty(k, v as string);
+                });
+              }
+              openAppKitModal();
+            }}>
               Open modal with this theme
             </button>
           </div>
@@ -128,12 +119,6 @@ ${Object.entries(cssVars).filter(([, v]) => typeof v === 'string').map(([k, v]) 
         </DemoPanel>
       </div>
 
-      <saganta-appkit-modal
-        ref={setModalRef as never}
-        mode="auto"
-        theme="dark"
-        style={cssVars}
-      />
     </DemoPageLayout>
   );
 }

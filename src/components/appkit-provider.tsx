@@ -2,19 +2,17 @@
 
 import {
   StellarAppKitProvider,
+  useAppKit,
   type StellarAppKitProviderConfig,
 } from '@saganta/stellar-appkit/react';
-import { type ReactNode, useEffect } from 'react';
+import { type ReactNode, useRef, useEffect } from 'react';
 import {
   createFreighterConnector,
   createAlbedoConnector,
   createXBullConnector,
 } from '@saganta/stellar-appkit';
+import type { StellarAppKit } from '@saganta/stellar-appkit';
 // Static import — registers the <saganta-appkit-modal> custom element.
-// This is safe because this component is 'use client' and all demo pages
-// have `export const dynamic = 'force-dynamic'` — the module is never
-// evaluated during SSR. The customElements.define() call at the bottom
-// of connect-modal.js is guarded by `typeof customElements !== 'undefined'`.
 import '@saganta/stellar-appkit/ui-web';
 
 const config: StellarAppKitProviderConfig = {
@@ -32,12 +30,58 @@ const config: StellarAppKitProviderConfig = {
 };
 
 export function AppKitProvider({ children }: { children: ReactNode }) {
-  // The ui-web module is imported statically above — the custom element
-  // is registered as soon as this module loads in the browser.
-  // No useEffect needed for registration.
-  useEffect(() => {
-    // Just trigger a restore on mount.
-  }, []);
+  return (
+    <StellarAppKitProvider config={config}>
+      <PersistentModal />
+      {children}
+    </StellarAppKitProvider>
+  );
+}
 
-  return <StellarAppKitProvider config={config}>{children}</StellarAppKitProvider>;
+/**
+ * Renders a persistent <saganta-appkit-modal> and sets its client from context.
+ * This modal stays mounted for the entire session — it handles:
+ * - Wallet selection (when user clicks "Connect wallet" in ConnectGate)
+ * - Transaction preview (when user signs — onPreviewTransaction is wired here)
+ * - Connected view (balance, history, disconnect)
+ *
+ * ConnectGate no longer renders its own modal — it opens this persistent one.
+ */
+function PersistentModal() {
+  const client = useAppKit();
+  const modalElRef = useRef<HTMLElement & { client: StellarAppKit | null; open?: () => Promise<void> } | null>(null);
+
+  const setModalRef = (el: HTMLElement & { client: StellarAppKit | null; open?: () => Promise<void> } | null) => {
+    modalElRef.current = el;
+    if (el && !el.client) {
+      el.client = client;
+    }
+  };
+
+  useEffect(() => {
+    const el = modalElRef.current;
+    if (el && !el.client) {
+      el.client = client;
+    }
+  }, [client]);
+
+  return (
+    <saganta-appkit-modal
+      ref={setModalRef as never}
+      mode="auto"
+      theme="dark"
+    />
+  );
+}
+
+/**
+ * Helper for ConnectGate and demos to open the persistent modal.
+ * Since the modal is mounted at the provider level, we need a way for
+ * child components to open it. We use a simple DOM query.
+ */
+export function openAppKitModal() {
+  const el = document.querySelector<HTMLElement & { open?: () => Promise<void> }>('saganta-appkit-modal');
+  if (el) {
+    el.open?.();
+  }
 }
