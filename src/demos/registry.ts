@@ -121,10 +121,10 @@ export const demos: Demo[] = [
   },
   {
     slug: 'modal-modes',
-    title: 'Modal Presentation Modes',
-    description: 'Switch between auto / modal / bottom-sheet / inline presentation modes with a single prop. See how the same modal adapts to desktop, mobile, and embedded use cases.',
+    title: 'Modal Presentation Modes & Animations',
+    description: 'Switch between auto / modal / bottomsheet / inline presentation modes with a single prop. Try every WAAPI animation preset (none, fade, scale, scale-blur, slide-up, slide-left, implode) and see the default open/close transitions in action.',
     category: 'ui',
-    tags: ['react', 'modal', 'mode', 'bottom-sheet', 'inline'],
+    tags: ['react', 'modal', 'mode', 'animation', 'bottomsheet', 'inline', 'waapi'],
     hasServer: false,
     difficulty: 'beginner',
   },

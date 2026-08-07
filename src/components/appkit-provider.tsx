@@ -15,6 +15,10 @@ import type { StellarAppKit } from '@saganta/stellar-appkit';
 // Static import — registers the <saganta-appkit-modal> custom element.
 import '@saganta/stellar-appkit-ui-web';
 
+// NOTE: As of @saganta/stellar-appkit v1.0.3, `connectors` is optional —
+// omit it to auto-register Freighter, Albedo, xBull, and Ledger via the new
+// `defaultConnectors()` helper. We pass an explicit list here for backwards
+// compatibility with consumers on v1.0.2 or earlier.
 const config: StellarAppKitProviderConfig = {
   network: 'TESTNET',
   connectors: [

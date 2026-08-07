@@ -38,13 +38,14 @@ Stellar AppKit is a Web3Modal / Reown AppKit equivalent for Stellar. It provides
 
 ### UI & Theming
 - Theming Showcase: every CSS custom property exposed — override accent, surface, radius, fonts, shadows in real time with a live preview. Save your theme as a snippet to paste into your own app.
-- Modal Presentation Modes: switch between auto / modal / bottomsheet / inline presentation modes with a single prop. See how the same modal adapts to desktop, mobile, and embedded use cases.
+- Modal Presentation Modes & Animations: switch between auto / modal / bottomsheet / inline presentation modes with a single prop. Try every WAAPI animation preset (none, fade, scale, scale-blur, slide-up, slide-left, implode) and see the default open/close transitions in action. The bottom-sheet's drag-to-dismiss uses a separate custom spring engine (zero dependencies).
 
 ## Technology Stack
 - Next.js 15 (App Router, React 19)
 - OpenNext for Cloudflare (runs Next.js on Cloudflare Workers)
-- @saganta/stellar-appkit v0.2.2
-- @saganta/stellar-appkit-siws-verify v0.2.2
+- @saganta/stellar-appkit v1.0.3
+- @saganta/stellar-appkit-ui-web v1.0.3
+- @saganta/stellar-appkit-siws-verify v1.0.3
 - Tailwind CSS v4 (CSS-first config)
 - Stellar Testnet (all demos use Testnet — get test XLM from friendbot.stellar.org)
 

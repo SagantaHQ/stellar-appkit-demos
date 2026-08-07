@@ -7,12 +7,24 @@ import { useRef, useState } from 'react';
 import { useAppKit } from '@saganta/stellar-appkit-ui-web/react';
 import type { StellarAppKit } from '@saganta/stellar-appkit';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
-import { CodeBlock } from '@/components/code-block';
 
 type Mode = 'auto' | 'modal' | 'bottomsheet' | 'inline';
+type AnimationPreset = 'default' | 'none' | 'fade' | 'scale' | 'scale-blur' | 'slide-up' | 'slide-left' | 'implode';
+
+const ANIMATION_PRESETS: { value: AnimationPreset; label: string }[] = [
+  { value: 'default', label: 'default (scale-blur for modal, slide-up for bottomsheet)' },
+  { value: 'none', label: 'none (instant)' },
+  { value: 'fade', label: 'fade (opacity only)' },
+  { value: 'scale', label: 'scale (opacity + scale)' },
+  { value: 'scale-blur', label: 'scale-blur (opacity + scale + blur)' },
+  { value: 'slide-up', label: 'slide-up (translateY, mobile-style)' },
+  { value: 'slide-left', label: 'slide-left (translateX)' },
+  { value: 'implode', label: 'implode (scale + rotate + blur — Web3 entrance)' },
+];
 
 export default function ModalModesDemo() {
   const [mode, setMode] = useState<Mode>('auto');
+  const [animation, setAnimation] = useState<AnimationPreset>('default');
   const client = useAppKit();
   const modalElRef = useRef<HTMLElement & { client: StellarAppKit | null; open?: () => Promise<void> } | null>(null);
 
@@ -32,6 +44,8 @@ export default function ModalModesDemo() {
     await el.open?.();
   };
 
+  const animationAttr = animation === 'default' ? undefined : animation;
+
   return (
     <DemoPageLayout slug="modal-modes">
       <div className="demo-page__layout">
@@ -45,6 +59,22 @@ export default function ModalModesDemo() {
                 <option value="bottomsheet">bottomsheet (always draggable sheet)</option>
                 <option value="inline">inline (embedded, no overlay)</option>
               </select>
+            </div>
+
+            <div className="field">
+              <label className="field__label">Open / close animation</label>
+              <select
+                className="field__select"
+                value={animation}
+                onChange={(e) => setAnimation(e.target.value as AnimationPreset)}
+              >
+                {ANIMATION_PRESETS.map((p) => (
+                  <option key={p.value} value={p.value}>{p.label}</option>
+                ))}
+              </select>
+              <div style={{ marginTop: '0.5rem', fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
+                Animations are zero-dependency WAAPI. <code>prefers-reduced-motion</code> is respected automatically.
+              </div>
             </div>
 
             {mode !== 'inline' && (
@@ -72,8 +102,15 @@ export default function ModalModesDemo() {
             <li><code>inline</code> — embedded in-page, no overlay, always visible</li>
           </ul>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: '1rem 0 0' }}>
-            For <code>inline</code> mode, the modal fills its container — give
-            the parent a defined width and height.
+            The <code>animation</code> attribute controls the open/close transition.
+            Default is <code>scale-blur</code> for modal, <code>slide-up</code> for bottomsheet.
+            Override per-modal via HTML attributes, or globally via the{' '}
+            <code>StellarAppKit</code> config&apos;s <code>modal.animation</code> field.
+          </p>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: '1rem 0 0' }}>
+            The bottom-sheet&apos;s drag-to-dismiss uses a separate custom spring engine
+            (zero dependencies — native Pointer Events + <code>requestAnimationFrame</code>),
+            so dragging and WAAPI transitions don&apos;t conflict.
           </p>
         </DemoPanel>
       </div>
@@ -95,6 +132,7 @@ export default function ModalModesDemo() {
           ref={setModalRef as never}
           mode={mode}
           theme="dark"
+          {...(animationAttr ? { animation: animationAttr } : {})}
         />
       )}
     </DemoPageLayout>
