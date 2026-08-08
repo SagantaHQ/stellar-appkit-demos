@@ -164,6 +164,15 @@ export const demos: Demo[] = [
     hasServer: false,
     difficulty: 'advanced',
   },
+  {
+    slug: 'i18n-locales',
+    title: 'Internationalization (25 Locales)',
+    description: 'Switch the modal UI between 25 languages in real-time — English is bundled, 24 other locales are lazy-loaded on first use. Uses intl-messageformat for ICU MessageFormat (plurals, interpolation). Try Arabic or Hebrew for RTL.',
+    category: 'ui',
+    tags: ['react', 'i18n', 'locale', 'useLocale', 'useSetLocale', 'intl-messageformat', 'rtl'],
+    hasServer: false,
+    difficulty: 'beginner',
+  },
 ];
 
 export const demoCategories: { id: Demo['category']; label: string; description: string }[] = [
