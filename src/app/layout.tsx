@@ -3,6 +3,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { GoogleAnalytics } from '@/components/google-analytics';
+import { DebugPanel } from '@/components/debug-panel';
 import './globals.css';
 
 const SITE_URL = 'https://demos.stellar-appkit.saganta.com';
@@ -190,6 +191,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="app-main">{children}</main>
             <SiteFooter />
           </div>
+          <DebugPanel />
         </ThemeProvider>
       </body>
     </html>
