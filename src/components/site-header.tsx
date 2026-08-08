@@ -16,12 +16,10 @@ export function SiteHeader() {
           </span>
           <div className="brand__text">
             <span className="brand__name">Stellar AppKit</span>
-            <span className="brand__suffix">Demos</span>
           </div>
         </Link>
 
         <nav className="site-nav">
-          <Link href="/" className="site-nav__link">Demos</Link>
           <a
             href="https://stellar-appkit.saganta.com"
             target="_blank"
