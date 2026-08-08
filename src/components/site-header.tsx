@@ -16,7 +16,7 @@ export function SiteHeader() {
           </span>
           <div className="brand__text">
             <span className="brand__name">Stellar AppKit</span>
-            <span className="brand__suffix">Examples</span>
+            <span className="brand__suffix">Demos</span>
           </div>
         </Link>
 
