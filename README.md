@@ -17,7 +17,7 @@ Built with **Next.js 15** + **OpenNext for Cloudflare** (deployed on Cloudflare 
 ### Wallet Connection
 - **Connect a Wallet** — the minimal modal-based flow
 - **Wallet Picker** — build your own picker UI with `registry.listReachability()`
-- **WalletConnect (Hana, Lobstr)** — connect mobile wallets via QR pairing (requires `NEXT_PUBLIC_REOWN_PROJECT_ID`)
+- **WalletConnect (Hana, Lobstr)** — connect mobile wallets via the modal's built-in QR pairing (requires `NEXT_PUBLIC_REOWN_PROJECT_ID`)
 - **Network Mismatch Recovery** — typed `NetworkMismatchError` + auto-retry
 
 ### Signing & Previews
@@ -137,10 +137,9 @@ All demos run on **Stellar Testnet**. Connect a wallet with Testnet funds — ge
 
 - [Next.js 15](https://nextjs.org) (App Router, React 19)
 - [OpenNext for Cloudflare](https://opennext.js.org/cloudflare) — runs Next.js on Cloudflare Workers
-- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v1.7.1 (v1.7.2+ recommended for full `siwsConfig` support on the React provider)
-- [@saganta/stellar-appkit-ui-web](https://github.com/sagantaHQ/stellar-appkit) v1.7.1
-- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v1.7.1
-- [qrcode.react](https://github.com/zpao/qrcode.react) v4 — QR code rendering for the WalletConnect demo
+- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v1.7.2 (v1.8.0+ adds i18n with 25 locales — coming soon to npm)
+- [@saganta/stellar-appkit-ui-web](https://github.com/sagantaHQ/stellar-appkit) v1.7.2
+- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v1.7.2
 - [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config, no `tailwind.config.js`)
 
 ## License

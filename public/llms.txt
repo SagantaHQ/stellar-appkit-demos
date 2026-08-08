@@ -13,7 +13,7 @@
 ### Wallet Connection
 - [Connect a Wallet](https://demos.stellar-appkit.saganta.com/demos/connect-wallet): The minimal modal-based flow — render the modal, let the user pick a wallet, show the connected address
 - [Wallet Picker](https://demos.stellar-appkit.saganta.com/demos/multi-wallet-list): Build your own wallet picker UI with registry.listReachability()
-- [WalletConnect (Hana, Lobstr)](https://demos.stellar-appkit.saganta.com/demos/walletconnect): Connect mobile wallets via QR pairing — requires NEXT_PUBLIC_REOWN_PROJECT_ID env var, shows setup guide when not configured
+- [WalletConnect (Hana, Lobstr)](https://demos.stellar-appkit.saganta.com/demos/walletconnect): Connect mobile wallets via the modal's built-in QR pairing — register the connector, modal renders the QR automatically. Requires NEXT_PUBLIC_REOWN_PROJECT_ID env var.
 - [Network Mismatch Recovery](https://demos.stellar-appkit.saganta.com/demos/network-mismatch): Typed NetworkMismatchError + auto-retry polling
 
 ### Signing & Previews

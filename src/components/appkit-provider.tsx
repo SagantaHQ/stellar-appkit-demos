@@ -32,21 +32,6 @@ import '@saganta/stellar-appkit-ui-web';
  */
 const WC_PROJECT_ID = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID;
 
-/**
- * A module-level callback that the WalletConnect connector calls with the
- * pairing URI. The WalletConnect demo page subscribes to this so it can
- * render the QR code. Other demos that don't care about WC just ignore it.
- *
- * We use this indirection because the connector is created once at module
- * load time (before any demo page mounts), but the QR code UI is per-page.
- */
-type UriListener = (uri: string | null) => void;
-let uriListener: UriListener | null = null;
-
-export function setWalletConnectUriListener(fn: UriListener | null) {
-  uriListener = fn;
-}
-
 /** Returns true if the WalletConnect connector is registered (env var set). */
 export function isWalletConnectEnabled(): boolean {
   return !!WC_PROJECT_ID;
@@ -62,7 +47,9 @@ function buildConnectors(): WalletConnector[] {
     createLedgerConnector(),
   ];
 
-  // Add WalletConnect if the project ID is configured
+  // Add WalletConnect if the project ID is configured.
+  // The modal renders the QR code automatically using better-qr —
+  // we don't need onUri or any external QR library.
   if (WC_PROJECT_ID) {
     connectors.push(
       createWalletConnectConnector({
@@ -72,13 +59,6 @@ function buildConnectors(): WalletConnector[] {
           description: 'Live demos of @saganta/stellar-appkit — wallet connection, signing, Soroban, SIWS',
           url: 'https://demos.stellar-appkit.saganta.com',
           icons: ['https://demos.stellar-appkit.saganta.com/icon.png'],
-        },
-        // onUri is OPTIONAL — the modal renders the QR code automatically
-        // using better-qr. We set it here only because the /demos/walletconnect
-        // page shows its own QR (using qrcode.react) for demonstration purposes.
-        // If you're just using the modal, you can omit onUri entirely.
-        onUri: (uri) => {
-          if (uriListener) uriListener(uri);
         },
         networkPassphrase: Networks.TESTNET,
       }),

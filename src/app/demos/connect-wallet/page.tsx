@@ -104,7 +104,7 @@ export function App() {
     <StellarAppKitProvider config={{
       network: 'TESTNET',
       connectors: [createFreighterConnector()],
-      appMetadata: { name: 'My App', domain: 'app.example.com', uri: 'https://app.example.com' },
+      appMetadata: { name: 'My App', url: 'https://app.example.com' },
     }}>
       <WalletButton />
       <StellarAppKitModal mode="auto" theme="dark" />

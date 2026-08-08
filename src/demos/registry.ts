@@ -32,11 +32,11 @@ export const demos: Demo[] = [
   {
     slug: 'walletconnect',
     title: 'WalletConnect (Hana, Lobstr)',
-    description: 'Connect mobile wallets (Hana, Lobstr, Hot Wallet) via WalletConnect QR pairing. Requires NEXT_PUBLIC_REOWN_PROJECT_ID env var — the demo shows a setup guide when it\'s not configured.',
+    description: 'Connect mobile wallets (Hana, Lobstr, Hot Wallet) via the modal\'s built-in WalletConnect QR pairing. The modal renders the QR code automatically — you just register the connector and it appears in the wallet picker. Requires NEXT_PUBLIC_REOWN_PROJECT_ID env var.',
     category: 'wallet',
-    tags: ['react', 'walletconnect', 'qr', 'hana', 'lobstr', 'mobile'],
+    tags: ['react', 'walletconnect', 'qr', 'hana', 'lobstr', 'mobile', 'modal'],
     hasServer: false,
-    difficulty: 'intermediate',
+    difficulty: 'beginner',
   },
   {
     slug: 'network-mismatch',

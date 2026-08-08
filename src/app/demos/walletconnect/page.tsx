@@ -3,15 +3,11 @@
 // Force dynamic rendering — the modal uses HTMLElement which is undefined during SSR.
 export const dynamic = 'force-dynamic';
 
-import { useState, useEffect } from 'react';
 import { useConnect, useSession } from '@saganta/stellar-appkit-ui-web/react';
-import { QRCodeSVG } from 'qrcode.react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
-import {
-  setWalletConnectUriListener,
-  isWalletConnectEnabled,
-} from '@/components/appkit-provider';
+import { openAppKitModal } from '@/components/appkit-provider';
+import { isWalletConnectEnabled } from '@/components/appkit-provider';
 
 export default function WalletConnectDemo() {
   const wcEnabled = isWalletConnectEnabled();
@@ -55,51 +51,8 @@ export default function WalletConnectDemo() {
 }
 
 function WalletConnectDemoInner() {
-  const { connect, isConnected, isConnecting } = useConnect();
+  const { isConnected, isConnecting } = useConnect();
   const session = useSession();
-  const [wcUri, setWcUri] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  // Subscribe to WalletConnect pairing URIs from the connector.
-  // The connector fires onUri(uri) when it generates a pairing code,
-  // which happens during connect() — before the wallet approves.
-  useEffect(() => {
-    setWalletConnectUriListener((uri) => {
-      setWcUri(uri);
-    });
-    return () => {
-      setWalletConnectUriListener(null);
-      setWcUri(null);
-    };
-  }, []);
-
-  // Clear the URI once connected (the QR is no longer needed)
-  useEffect(() => {
-    if (isConnected && wcUri) {
-      setWcUri(null);
-    }
-  }, [isConnected, wcUri]);
-
-  // Clear error when a new connection attempt starts
-  useEffect(() => {
-    if (isConnecting) setError(null);
-  }, [isConnecting]);
-
-  const handleConnect = async () => {
-    setError(null);
-    setWcUri(null);
-    try {
-      // Call connect('walletconnect') directly — NOT via the modal.
-      // This lets us render the QR code on the page itself, which is
-      // the correct UX for WalletConnect (the QR IS the connection UI).
-      // The modal also supports WC QR rendering (via setOnUri), but for
-      // this demo we show it on the page so you can see both approaches.
-      await connect('walletconnect');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-      setWcUri(null);
-    }
-  };
 
   // --- Connected state ---
   if (isConnected && session) {
@@ -113,100 +66,43 @@ function WalletConnectDemoInner() {
             <div style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
               Wallet: <code>{session.walletId}</code> · Network: <code>{session.network}</code>
             </div>
+            <div style={{ marginTop: '0.5rem', fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
+              Click <strong>Open wallet</strong> below to disconnect, switch wallets, or view your balance + transaction history.
+            </div>
           </div>
         </DemoPanel>
       </div>
     );
   }
 
-  // --- Connecting / idle state ---
+  // --- Idle / connecting state ---
   return (
     <div className="demo-page__layout">
       <DemoPanel title="Live demo">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div>
             <button
               className="btn btn--primary"
-              onClick={handleConnect}
+              onClick={() => openAppKitModal()}
               disabled={isConnecting}
             >
-              {isConnecting ? 'Connecting...' : 'Connect WalletConnect'}
+              {isConnecting ? 'Connecting...' : 'Connect wallet'}
             </button>
           </div>
 
-          {/* QR code panel — shows when a pairing URI is available */}
-          {wcUri && !isConnected && (
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '0.75rem',
-              padding: '1.5rem',
-              background: 'var(--color-surface)',
-              borderRadius: '12px',
-              border: '1px solid var(--color-border)',
-            }}>
-              <div style={{
-                background: 'white',
-                padding: '16px',
-                borderRadius: '12px',
-                lineHeight: 0,
-              }}>
-                <QRCodeSVG value={wcUri} size={220} marginSize={1} />
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '0.9375rem', fontWeight: 600, marginBottom: '0.25rem' }}>
-                  Scan with Hana, Lobstr, or Hot Wallet
-                </div>
-                <div style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
-                  Open your wallet app and scan this QR code to connect.
-                </div>
-              </div>
-              {/* Deep link button for mobile users */}
-              <a
-                href={wcUri}
-                style={{
-                  fontSize: '0.8125rem',
-                  color: 'var(--color-accent)',
-                  textDecoration: 'none',
-                }}
-              >
-                Or open in wallet app →
-              </a>
+          <div className="empty-state">
+            <div className="empty-state__icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+              </svg>
             </div>
-          )}
-
-          {/* Error state */}
-          {error && (
-            <div className="result-block result-block--error">
-              <strong>Connection failed:</strong> {error}
-            </div>
-          )}
-
-          {/* Idle state — before clicking connect */}
-          {!wcUri && !isConnecting && !error && (
-            <div className="empty-state">
-              <div className="empty-state__icon">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="7" height="7" rx="1" />
-                  <rect x="14" y="3" width="7" height="7" rx="1" />
-                  <rect x="3" y="14" width="7" height="7" rx="1" />
-                  <rect x="14" y="14" width="7" height="7" rx="1" />
-                </svg>
-              </div>
-              Click <strong>Connect WalletConnect</strong> to generate a QR code.
-            </div>
-          )}
-
-          {/* Loading state — connecting but no URI yet */}
-          {isConnecting && !wcUri && (
-            <div className="empty-state">
-              <div className="empty-state__icon">
-                <div className="wallet-list-loading" />
-              </div>
-              Generating pairing code…
-            </div>
-          )}
+            Click <strong>Connect wallet</strong> to open the modal, then pick{' '}
+            <strong>WalletConnect</strong> from the wallet list. The modal renders
+            the QR code automatically — no extra code needed.
+          </div>
         </div>
       </DemoPanel>
 
@@ -216,18 +112,24 @@ function WalletConnectDemoInner() {
           wallets (Hana, Lobstr, Hot Wallet) via a QR code. The flow:
         </p>
         <ol style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.7, margin: '0.75rem 0', paddingLeft: '1.25rem' }}>
-          <li><code>connect('walletconnect')</code> calls <code>SignClient.init()</code></li>
-          <li>Generates a pairing URI via <code>client.connect()</code></li>
-          <li>Fires <code>onUri(uri)</code> — this demo renders it as a QR code</li>
-          <li>The wallet scans the QR, approves the connection</li>
+          <li>User clicks <strong>Connect wallet</strong> → modal opens</li>
+          <li>User picks <strong>WalletConnect</strong> from the wallet list</li>
+          <li>Modal calls <code>connect('walletconnect')</code> internally</li>
+          <li>Connector generates a pairing URI via <code>SignClient.connect()</code></li>
+          <li>Modal renders the QR code automatically (using <code>better-qr</code>)</li>
+          <li>User scans the QR with Hana/Lobstr/Hot Wallet and approves</li>
           <li><code>connect()</code> resolves with the wallet&apos;s address</li>
         </ol>
         <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: '1rem 0 0' }}>
-          <strong>Note:</strong> This demo calls <code>connect()</code>{' '}
-          <em>directly</em> instead of opening the modal, because the QR code
-          needs to be visible on the page. The modal also supports WC QR
-          rendering — if you click WalletConnect from the modal&apos;s wallet
-          list, the QR appears inside the modal.
+          <strong>You never call <code>connect('walletconnect')</code> directly.</strong>{' '}
+          The modal handles the entire flow — you just register the WalletConnect
+          connector in your <code>StellarAppKit</code> config, and it appears in
+          the modal&apos;s wallet list alongside Freighter, Albedo, xBull, and Ledger.
+        </p>
+        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: '1rem 0 0' }}>
+          The QR code is rendered inside the modal as an inline SVG (no external
+          QR library needed). The modal also shows a deep-link button for mobile
+          users and a <strong>Copy URI</strong> button with &quot;Copied!&quot; feedback.
         </p>
         <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9375rem', lineHeight: 1.6, margin: '1rem 0 0' }}>
           The session topic is persisted in <code>localStorage</code>, so{' '}
@@ -266,7 +168,7 @@ function SetupPanel() {
 NEXT_PUBLIC_REOWN_PROJECT_ID=your-project-id-here`} language="bash" />
 
       <div className="field__label" style={{ marginTop: '1rem', marginBottom: '0.5rem' }}>
-        3. Create the connector
+        3. Register the connector — the modal handles the rest
       </div>
       <CodeBlock code={SETUP_CODE} language="typescript" />
     </DemoPanel>
@@ -279,6 +181,7 @@ const SETUP_CODE = `import {
   defaultConnectors,
   Networks,
 } from '@saganta/stellar-appkit';
+import '@saganta/stellar-appkit-ui-web';
 
 const appkit = new StellarAppKit({
   network: 'TESTNET',
@@ -286,16 +189,24 @@ const appkit = new StellarAppKit({
     ...defaultConnectors(), // Freighter, Albedo, xBull, Ledger
     createWalletConnectConnector({
       projectId: process.env.NEXT_PUBLIC_REOWN_PROJECT_ID!,
-      metadata: {
-        name: 'My App',
-        description: 'A Stellar dApp',
-        url: 'https://app.example.com',
-        icons: ['https://app.example.com/icon.png'],
-      },
       networkPassphrase: Networks.TESTNET,
-      // onUri is optional — the modal renders the QR code automatically
-      // using better-qr. Only set it if you're building your own UI.
+      // metadata is OPTIONAL — inherits from appMetadata automatically.
+      // Only pass it if you want a DIFFERENT name/icon for the WC session
+      // proposal than what appears in SIWS messages.
+      // onUri is also OPTIONAL — the modal renders the QR automatically.
     }),
   ],
-  appMetadata: { name: 'Example App' },
-});`;
+  appMetadata: {
+    name: 'My App',
+    url: 'https://app.example.com',
+    description: 'A Stellar dApp',
+    icons: ['https://app.example.com/icon.png'],
+  },
+});
+
+// The modal picks up WalletConnect from the connector list.
+// When the user clicks "WalletConnect" in the wallet picker,
+// the modal calls connect('walletconnect') and renders the QR code.
+const modal = document.querySelector('stellar-appkit-modal');
+modal.client = appkit;
+modal.open();`;

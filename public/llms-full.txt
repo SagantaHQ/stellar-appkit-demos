@@ -19,7 +19,7 @@ Stellar AppKit is a Web3Modal / Reown AppKit equivalent for Stellar. It provides
 ### Wallet Connection
 - Connect a Wallet: the minimal modal-based flow — render the modal, let the user pick a wallet (Freighter, Albedo, xBull), show the connected address. The starting point for every other demo.
 - Wallet Picker: build your own wallet picker UI instead of using the built-in modal. Lists every registered connector with its reachability status and icon.
-- WalletConnect (Hana, Lobstr): connect mobile wallets via WalletConnect QR pairing. Requires NEXT_PUBLIC_REOWN_PROJECT_ID env var — the demo shows a setup guide when it's not configured. Renders the pairing URI as a QR code (using qrcode.react) for the user to scan with Hana, Lobstr, or Hot Wallet.
+- WalletConnect (Hana, Lobstr): connect mobile wallets via the modal's built-in WalletConnect QR pairing. Register the WalletConnect connector in your StellarAppKit config, and it appears in the modal's wallet list alongside Freighter, Albedo, xBull, and Ledger. When the user picks WalletConnect, the modal calls connect('walletconnect') internally and renders the QR code automatically (using better-qr) — no extra code or QR library needed. The modal also shows a deep-link button for mobile and a Copy URI button. Requires NEXT_PUBLIC_REOWN_PROJECT_ID env var; shows a setup guide when not configured.
 - Network Mismatch Recovery: connect to a wallet on the wrong network, see the typed NetworkMismatchError, and watch the auto-retry mode poll until the user switches networks.
 
 ### Signing & Previews
