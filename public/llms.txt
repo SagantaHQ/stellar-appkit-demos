@@ -1,6 +1,6 @@
 # Stellar AppKit Demos
 
-> Live, copy-pasteable demos of @saganta/stellar-appkit — 17 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
+> Live, copy-pasteable demos of @saganta/stellar-appkit — 18 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
 >
 > URL: https://demos.stellar-appkit.saganta.com
 > Library: https://github.com/sagantaHQ/stellar-appkit
@@ -29,6 +29,7 @@
 ### Sign-In With Stellar
 - [SIWS Sign-In](https://demos.stellar-appkit.saganta.com/demos/siws-sign-in): Full client + server flow with session cookie — verifySiws() server-side
 - [SIWS Session via Middleware](https://demos.stellar-appkit.saganta.com/demos/siws-session-middleware): Protect routes with Next.js middleware
+- [SIWS Session Management (v1.7.x)](https://demos.stellar-appkit.saganta.com/demos/siws-session-management): useSiwsSession(), useIsAuthenticated(), signOut(), validateSession(), reauthenticate() + persistence
 - [SIWS Debug Verification](https://demos.stellar-appkit.saganta.com/demos/siws-debug-verification): Diagnostics dump of every candidate byte sequence
 
 ### UI & Theming

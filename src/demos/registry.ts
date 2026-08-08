@@ -120,6 +120,15 @@ export const demos: Demo[] = [
     difficulty: 'advanced',
   },
   {
+    slug: 'siws-session-management',
+    title: 'SIWS Session Management (v1.7.x)',
+    description: 'Exercise the full v1.7.x SIWS session lifecycle: useSiwsSession(), useIsAuthenticated(), setSiwsSession(), signOut(), validateSession(), requireAuth(), reauthenticate(), and localStorage persistence across page reloads.',
+    category: 'siws',
+    tags: ['react', 'siws', 'useSiwsSession', 'useIsAuthenticated', 'signOut', 'validateSession', 'reauthenticate', 'persistence'],
+    hasServer: true,
+    difficulty: 'advanced',
+  },
+  {
     slug: 'theming-showcase',
     title: 'Theming Showcase',
     description: 'Every CSS custom property exposed — override accent, surface, radius, fonts, shadows in real time with a live preview. Save your theme as a snippet to paste into your own app.',

@@ -12,7 +12,7 @@ Built with **Next.js 15** + **OpenNext for Cloudflare** (deployed on Cloudflare 
 
 ## Demos
 
-17 demos across 5 categories — each is a single Next.js route you can copy into your own app:
+18 demos across 5 categories — each is a single Next.js route you can copy into your own app:
 
 ### Wallet Connection
 - **Connect a Wallet** — the minimal modal-based flow
@@ -33,6 +33,7 @@ Built with **Next.js 15** + **OpenNext for Cloudflare** (deployed on Cloudflare 
 ### Sign-In With Stellar
 - **SIWS Sign-In** — full client + server flow with session cookie
 - **SIWS Session via Middleware** — protect routes with Next.js middleware
+- **SIWS Session Management (v1.7.x)** — `useSiwsSession()`, `useIsAuthenticated()`, `signOut()`, `validateSession()`, `reauthenticate()`, and persistence across reloads
 - **SIWS Debug Verification** — diagnostics dump of every candidate byte sequence
 
 ### UI & Theming
@@ -136,9 +137,9 @@ All demos run on **Stellar Testnet**. Connect a wallet with Testnet funds — ge
 
 - [Next.js 15](https://nextjs.org) (App Router, React 19)
 - [OpenNext for Cloudflare](https://opennext.js.org/cloudflare) — runs Next.js on Cloudflare Workers
-- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v1.2.1
-- [@saganta/stellar-appkit-ui-web](https://github.com/sagantaHQ/stellar-appkit) v1.2.1
-- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v1.2.1
+- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v1.7.1 (v1.7.2+ recommended for full `siwsConfig` support on the React provider)
+- [@saganta/stellar-appkit-ui-web](https://github.com/sagantaHQ/stellar-appkit) v1.7.1
+- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v1.7.1
 - [qrcode.react](https://github.com/zpao/qrcode.react) v4 — QR code rendering for the WalletConnect demo
 - [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config, no `tailwind.config.js`)
 

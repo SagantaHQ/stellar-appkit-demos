@@ -1,6 +1,6 @@
 # Stellar AppKit Demos — Full Content
 
-> Live demos of @saganta/stellar-appkit — 17 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
+> Live demos of @saganta/stellar-appkit — 18 working examples of Stellar wallet connection, transaction signing, Soroban contract calls, SIWS authentication, and theming.
 >
 > URL: https://demos.stellar-appkit.saganta.com
 > Library: https://github.com/sagantaHQ/stellar-appkit
@@ -14,7 +14,7 @@ Stellar AppKit is a Web3Modal / Reown AppKit equivalent for Stellar. It provides
 
 ## What do the demos cover?
 
-17 demos across 5 categories, each a single Next.js route you can copy into your own app:
+18 demos across 5 categories, each a single Next.js route you can copy into your own app:
 
 ### Wallet Connection
 - Connect a Wallet: the minimal modal-based flow — render the modal, let the user pick a wallet (Freighter, Albedo, xBull), show the connected address. The starting point for every other demo.
@@ -35,6 +35,7 @@ Stellar AppKit is a Web3Modal / Reown AppKit equivalent for Stellar. It provides
 ### Sign-In With Stellar (SIWS)
 - SIWS Sign-In: full client + server flow — client signs the SIWS message, sends {message, signedMessage, signedData, signerAddress} to a Next.js API route, server verifies with @saganta/stellar-appkit-siws-verify. Establishes a session cookie.
 - SIWS Session via Middleware: protect routes with Next.js middleware — read the SIWS session cookie server-side and redirect unauthenticated users to /sign-in.
+- SIWS Session Management (v1.7.x): exercise the full v1.7.x SIWS session lifecycle — useSiwsSession(), useIsAuthenticated(), setSiwsSession(), signOut(), validateSession(), requireAuth(), reauthenticate(), and localStorage persistence across page reloads.
 - SIWS Debug Verification: trigger a verification failure (wrong nonce, wrong domain, tampered message) and inspect the debug diagnostics — every candidate byte sequence the verifier tried, with reasons for rejection.
 
 ### UI & Theming
@@ -44,9 +45,9 @@ Stellar AppKit is a Web3Modal / Reown AppKit equivalent for Stellar. It provides
 ## Technology Stack
 - Next.js 15 (App Router, React 19)
 - OpenNext for Cloudflare (runs Next.js on Cloudflare Workers)
-- @saganta/stellar-appkit v1.2.1
-- @saganta/stellar-appkit-ui-web v1.2.1
-- @saganta/stellar-appkit-siws-verify v1.2.1
+- @saganta/stellar-appkit v1.7.1 (v1.7.2+ recommended for full siwsConfig support on the React provider)
+- @saganta/stellar-appkit-ui-web v1.7.1
+- @saganta/stellar-appkit-siws-verify v1.7.1
 - Tailwind CSS v4 (CSS-first config)
 - Stellar Testnet (all demos use Testnet — get test XLM from friendbot.stellar.org)
 
