@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { ThemeToggle } from './theme-toggle';
+import { LIBRARY_VERSION } from '@/lib/version';
 
 export function SiteHeader() {
   return (
@@ -16,6 +17,7 @@ export function SiteHeader() {
           </span>
           <div className="brand__text">
             <span className="brand__name">Stellar AppKit</span>
+            <span className="brand__version">v{LIBRARY_VERSION}</span>
           </div>
         </Link>
 

@@ -232,6 +232,13 @@ html.light .brand__mark {
   font-size: 1rem;
 }
 
+.brand__version {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+  opacity: 0.7;
+}
+
 .brand__suffix {
   font-size: 0.8125rem;
   color: var(--color-text-muted);
