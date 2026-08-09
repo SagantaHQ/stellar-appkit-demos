@@ -7,11 +7,8 @@ import {
 } from '@saganta/stellar-appkit-ui-web/react';
 import { type ReactNode, useRef, useEffect, useMemo } from 'react';
 import {
-  createFreighterConnector,
-  createAlbedoConnector,
-  createXBullConnector,
-  createLedgerConnector,
   createWalletConnectConnector,
+  defaultConnectors,
   Networks,
   type WalletConnector,
 } from '@saganta/stellar-appkit';
@@ -38,18 +35,18 @@ export function isWalletConnectEnabled(): boolean {
 }
 
 function buildConnectors(): WalletConnector[] {
-  // Start with the default browser-side wallets.
-  // Once v1.0.6+ is published, this can be replaced with `defaultConnectors()`.
-  const connectors: WalletConnector[] = [
-    createFreighterConnector(),
-    createAlbedoConnector(),
-    createXBullConnector(),
-    createLedgerConnector(),
-  ];
+  // Use the library's default connector set — Freighter, Albedo, xBull, Ledger,
+  // Rabet, Klever, HOT Wallet. Each connector lazy-imports its underlying SDK
+  // only when its methods are actually called, so importing them all is cheap.
+  // (Trezor is NOT in defaultConnectors() because it needs app metadata config
+  // — see createTrezorConnector().)
+  const connectors: WalletConnector[] = defaultConnectors();
 
   // Add WalletConnect if the project ID is configured.
   // The modal renders the QR code automatically using better-qr —
   // we don't need onUri or any external QR library.
+  // WalletConnect sorts to position #1 in the modal's wallet list regardless
+  // of where it's inserted here (see ConnectorRegistry.listReachability()).
   if (WC_PROJECT_ID) {
     connectors.push(
       createWalletConnectConnector({
