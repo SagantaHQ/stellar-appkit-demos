@@ -16,7 +16,23 @@ const nextConfig: NextConfig = {
     '@ledgerhq/hw-transport-webhid',
     '@ledgerhq/hw-transport-webusb',
     '@walletconnect/sign-client',
+    '@trezor/connect-web',
+    '@trezor/connect-plugin-stellar',
+    '@trezor/utils',
+    '@hot-wallet/sdk',
   ],
+  // Ignore Trezor packages that aren't used in the demos — prevents
+  // webpack from trying to resolve their broken export paths.
+  webpack: (config) => {
+    // Mark Trezor packages as empty modules — they're never used in the demos
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@trezor/connect-web': false,
+      '@trezor/connect-plugin-stellar': false,
+      '@trezor/utils': false,
+    };
+    return config;
+  },
 };
 
 export default nextConfig;
