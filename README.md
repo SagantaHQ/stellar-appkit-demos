@@ -65,52 +65,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-### Linked library (no npm publish wait)
-
-The demos `package.json` references `@saganta/stellar-appkit`, `@saganta/stellar-appkit-ui-web`, and `@saganta/stellar-appkit-siws-verify` via **`file:` paths** pointing at a sibling clone of the library repo. This means the demos always picks up whatever is in your local `../stellar-appkit/` checkout — you don't have to wait for an npm publish to test a library change against the demos.
-
-The `npm install` lifecycle hooks call `scripts/sync-lib.mjs` automatically:
-
-| Hook | What it does |
-|---|---|
-| `preinstall`  | `sync-lib.mjs --clone-only` — clones the library into `../stellar-appkit/` if missing, so npm can resolve the `file:` paths. |
-| `postinstall` | `sync-lib.mjs` — idempotent. Ensures the library has `node_modules` and a built `dist/` for every package. No-op if already done. |
-| `predev`      | Same as `postinstall` — makes sure the library is built before `next dev` starts. |
-| `prebuild`    | Same as `postinstall` — makes sure the library is built before `opennextjs-cloudflare build` / `next build` runs. |
-
-All of these are **idempotent** — they're no-ops on the happy path. The only required step on a fresh checkout is `npm install`; everything else happens automatically.
-
-#### Manual sync commands
-
-```bash
-npm run sync:lib         # idempotent — clone if missing, install if missing, build if missing
-npm run sync:lib:pull    # git pull + force rebuild — use after someone else pushed library changes
-npm run sync:lib:build   # force rebuild without pulling — use after you edit library source locally
-```
-
-#### Typical library-dev workflow
-
-1. Edit a file in `../stellar-appkit/packages/core/src/...`
-2. Run `npm run sync:lib:build` from the demos (rebuilds the library's `dist/`)
-3. Run `npm run dev` — the demos' `predev` hook will be a no-op (already built), and the dev server picks up the new code
-
-For live reload on library source changes, run TypeScript in watch mode in a second terminal:
-
-```bash
-# Terminal 1 — rebuild library on every save
-cd ../stellar-appkit
-npm run build --workspaces -- --watch  # or `tsc -p packages/core/tsconfig.json --watch`
-
-# Terminal 2 — demos dev server (hot-reloads Next.js code)
-cd ../stellar-appkit-demos
-npm run dev
-```
-
-#### Cloudflare CI / fresh build environments
-
-Cloudflare's build container starts with an empty workspace. The `preinstall` hook will `git clone` the library on first run, and the `postinstall` + `prebuild` hooks will install its deps and build it. No special CI configuration needed — `npm install && npm run build` is sufficient.
-
-> **Note**: The first build on CI will be slower (~1–2 min extra) because it clones + builds the library. Subsequent builds reuse the cached `../stellar-appkit/node_modules/` and `dist/` if Cloudflare caches the workspace between builds.
+The demos consume `@saganta/stellar-appkit`, `@saganta/stellar-appkit-ui-web`, and `@saganta/stellar-appkit-siws-verify` from npm at `^1.9.18`. To test a local library change against the demos, either publish a new version to npm and bump the version pin, or use `npm link` / `file:` paths in a local checkout (not committed).
 
 ## Deploy to Cloudflare Workers
 
@@ -159,14 +114,11 @@ This builds with OpenNext and serves the production build locally via `wrangler 
 
 | Script | What it does |
 |---|---|
-| `npm run dev` | Next.js dev server (hot reload, no OpenNext). `predev` hook first ensures `../stellar-appkit` is built. |
-| `npm run build` | **OpenNext build** — produces `.open-next/` (for Cloudflare deployment). `prebuild` hook first ensures `../stellar-appkit` is built. |
+| `npm run dev` | Next.js dev server (hot reload, no OpenNext). |
+| `npm run build` | **OpenNext build** — produces `.open-next/` (for Cloudflare deployment). |
 | `npm run build:next` | Plain `next build` — produces `.next/` (for local type-checking). |
 | `npm run preview` | OpenNext build + local `wrangler dev`. |
 | `npm run deploy` | OpenNext build + `opennextjs-cloudflare deploy`. |
-| `npm run sync:lib` | Idempotent — clone library if missing, install + build if missing. Called automatically by `preinstall` / `postinstall` / `predev` / `prebuild`. |
-| `npm run sync:lib:pull` | `git pull` the library + force rebuild. Run this after someone pushes library changes you want to test. |
-| `npm run sync:lib:build` | Force rebuild the library (no git pull). Run this after you edit library source locally. |
 
 > The `build` script is `opennextjs-cloudflare build` (not `next build`) because Cloudflare's build step runs `npm run build` — and we need it to produce `.open-next/`, not just `.next/`. To prevent infinite recursion (OpenNext calling `npm run build` → `opennextjs-cloudflare build` → `npm run build` → ...), `open-next.config.ts` sets `buildCommand: 'next build'` so OpenNext calls `next build` directly instead of `npm run build`.
 
@@ -188,9 +140,9 @@ All demos run on **Stellar Testnet**. Connect a wallet with Testnet funds — ge
 
 - [Next.js 15](https://nextjs.org) (App Router, React 19)
 - [OpenNext for Cloudflare](https://opennext.js.org/cloudflare) — runs Next.js on Cloudflare Workers
-- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) — **linked locally** via `file:../stellar-appkit/packages/core` (currently v1.9.18)
-- [@saganta/stellar-appkit-ui-web](https://github.com/sagantaHQ/stellar-appkit) — **linked locally** via `file:../stellar-appkit/packages/ui-web`
-- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) — **linked locally** via `file:../stellar-appkit/packages/siws-verify`
+- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v1.9.18 (from npm)
+- [@saganta/stellar-appkit-ui-web](https://github.com/sagantaHQ/stellar-appkit) v1.9.18 (from npm)
+- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v1.9.18 (from npm)
 - [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config, no `tailwind.config.js`)
 
 ## License
