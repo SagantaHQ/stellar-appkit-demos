@@ -11,6 +11,11 @@ const DESCRIPTION = 'Live, copy-pasteable demos of @saganta/stellar-appkit — 1
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  icons: {
+    icon: '/icon.png',
+    apple: '/icon.png',
+    shortcut: '/icon.png',
+  },
   title: {
     default: 'Stellar AppKit Demos — Live wallet, signing, Soroban & SIWS examples',
     template: '%s · Stellar AppKit Demos',
@@ -39,17 +44,17 @@ export const metadata: Metadata = {
     title: 'Stellar AppKit Demos — Live wallet, signing, Soroban & SIWS examples',
     description: DESCRIPTION,
     images: [{
-      url: '/og-image.png',
-      width: 1200,
-      height: 630,
-      alt: 'Stellar AppKit Demos — 14 live examples',
+      url: '/icon.png',
+      width: 512,
+      height: 512,
+      alt: 'Stellar AppKit Demos',
     }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Stellar AppKit Demos',
     description: DESCRIPTION,
-    images: ['/og-image.png'],
+    images: ['/icon.png'],
     creator: '@saganta',
   },
   robots: {
