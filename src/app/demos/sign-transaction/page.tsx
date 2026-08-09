@@ -46,7 +46,7 @@ export default function SignTransactionDemo() {
   );
 }
 
-const RECIPIENT = 'GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q3IY7ZP4PAOMM43YA'; // well-known Testnet faucet
+const RECIPIENT = 'GD5G3X25PD6IS3KEUV3QFF2BYXUY2OIUPIV5A5TMX4DSKASDN3EG7CJ6'; // Testnet demo recipient (fund via friendbot.stellar.org)
 const AMOUNT = '1';
 const HORIZON_TESTNET = 'https://horizon-testnet.stellar.org';
 
@@ -165,7 +165,7 @@ function SignButton() {
       networkPassphrase: sdk.Networks.TESTNET,
     })
       .addOperation(sdk.Operation.payment({
-        destination: 'GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q3IY7ZP4PAOMM43YA',
+        destination: 'GD5G3X25PD6IS3KEUV3QFF2BYXUY2OIUPIV5A5TMX4DSKASDN3EG7CJ6',
         asset: sdk.Asset.native(),
         amount: '1',
       }))

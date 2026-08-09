@@ -10,7 +10,7 @@ import { CodeBlock } from '@/components/code-block';
 import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
-const RECIPIENT = 'GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q3IY7ZP4PAOMM43YA';
+const RECIPIENT = 'GD5G3X25PD6IS3KEUV3QFF2BYXUY2OIUPIV5A5TMX4DSKASDN3EG7CJ6';
 
 export default function CustomPreviewUIDemo() {
   return (
