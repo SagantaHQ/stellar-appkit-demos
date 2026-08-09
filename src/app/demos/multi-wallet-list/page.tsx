@@ -8,6 +8,7 @@ import { useAppKit } from '@saganta/stellar-appkit-ui-web/react';
 import type { WalletConnector, WalletReachability } from '@saganta/stellar-appkit';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
+import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
 export default function MultiWalletListDemo() {
@@ -81,6 +82,8 @@ function WalletPickerDemo() {
   if (loading) return <div className="empty-state">Loading wallet list…</div>;
 
   return (
+    <ConnectGate>
+      {() => (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {wallets.map(({ connector, reachability }) => (
@@ -117,6 +120,8 @@ function WalletPickerDemo() {
         </div>
       )}
     </div>
+      )}
+    </ConnectGate>
   );
 }
 

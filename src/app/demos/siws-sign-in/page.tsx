@@ -4,9 +4,10 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
-import { useSignIn, useSession } from '@saganta/stellar-appkit-ui-web/react';
+import { useSignIn } from '@saganta/stellar-appkit-ui-web/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
+import { ConnectGate } from '@/components/connect-gate';
 
 export default function SiwsSignInDemo() {
   return (
@@ -47,7 +48,6 @@ export default function SiwsSignInDemo() {
 }
 
 function SiwsDemo() {
-  const walletSession = useSession();
   const { sign, isSigning, data, error } = useSignIn();
   const [serverSession, setServerSession] = useState<{ authenticated: boolean; address?: string } | null>(null);
   const [verifyResult, setVerifyResult] = useState<{ ok: boolean; address?: string; reason?: string } | null>(null);
@@ -61,8 +61,7 @@ function SiwsDemo() {
       .catch(() => setServerSession({ authenticated: false }));
   }, []);
 
-  const handleSignIn = async () => {
-    if (!walletSession) return;
+  const handleSignIn = async (address: string) => {
     setVerifyError(null);
     setVerifyResult(null);
     try {
@@ -106,15 +105,9 @@ function SiwsDemo() {
     setVerifyResult(null);
   };
 
-  if (!walletSession) {
-    return (
-      <div className="empty-state">
-        Connect a wallet first (use the <strong>Connect a Wallet</strong> demo above).
-      </div>
-    );
-  }
-
   return (
+    <ConnectGate>
+      {(walletSession) => (
     <div>
       <div style={{ marginBottom: '1rem' }}>
         <div className="field__label" style={{ marginBottom: '0.375rem' }}>Wallet session</div>
@@ -135,7 +128,7 @@ function SiwsDemo() {
       {!serverSession?.authenticated ? (
         <button
           className="btn btn--primary"
-          onClick={handleSignIn}
+          onClick={() => handleSignIn(walletSession.address)}
           disabled={isSigning}
         >
           {isSigning ? 'Sign the SIWS message...' : 'Sign in with Stellar'}
@@ -178,6 +171,8 @@ function SiwsDemo() {
         </div>
       )}
     </div>
+      )}
+    </ConnectGate>
   );
 }
 

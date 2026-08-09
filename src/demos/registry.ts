@@ -57,6 +57,15 @@ export const demos: Demo[] = [
     difficulty: 'intermediate',
   },
   {
+    slug: 'send-xlm',
+    title: 'Send XLM (Sign + Submit)',
+    description: 'Build a real payment, sign it through the modal preview, then submit it to Horizon Testnet — the recipient actually receives the XLM. Editable recipient + amount, with a link to the explorer once submitted.',
+    category: 'signing',
+    tags: ['react', 'signTransaction', 'payment', 'horizon', 'submit', 'testnet'],
+    hasServer: false,
+    difficulty: 'intermediate',
+  },
+  {
     slug: 'sign-message',
     title: 'Sign a Message',
     description: 'Sign an arbitrary message with the active wallet. Shows the signedMessage bytes and the signedData field (base64 of the exact bytes the wallet signed — critical for SIWS verification).',

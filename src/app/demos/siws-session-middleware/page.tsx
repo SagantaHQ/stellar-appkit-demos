@@ -4,10 +4,11 @@
 export const dynamic = 'force-dynamic';
 
 import { Suspense, useEffect, useState } from 'react';
-import { useSignIn, useSession } from '@saganta/stellar-appkit-ui-web/react';
+import { useSignIn } from '@saganta/stellar-appkit-ui-web/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
+import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
 export default function SiwsSessionMiddlewareDemo() {
@@ -53,7 +54,6 @@ export default function SiwsSessionMiddlewareDemo() {
 }
 
 function MiddlewareDemo() {
-  const walletSession = useSession();
   const { sign, isSigning } = useSignIn();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -65,7 +65,6 @@ function MiddlewareDemo() {
   }, []);
 
   const handleSignIn = async () => {
-    if (!walletSession) return;
     setError(null);
     try {
       const { nonce } = await fetch('/api/siws/nonce').then((r) => r.json());
@@ -99,41 +98,37 @@ function MiddlewareDemo() {
     }
   };
 
-  if (!walletSession) {
-    return (
-      <div className="empty-state">
-        Connect a wallet first (use the <strong>Connect a Wallet</strong> demo above).
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <div style={{ marginBottom: '1rem' }}>
-        <div className="field__label" style={{ marginBottom: '0.375rem' }}>Server session</div>
-        {serverSession?.authenticated ? (
-          <span className="status status--success">✓ authenticated</span>
-        ) : (
-          <span className="status">not authenticated</span>
-        )}
-      </div>
+    <ConnectGate>
+      {(session) => (
+        <div>
+          <div style={{ marginBottom: '1rem' }}>
+            <div className="field__label" style={{ marginBottom: '0.375rem' }}>Server session</div>
+            {serverSession?.authenticated ? (
+              <span className="status status--success">✓ authenticated</span>
+            ) : (
+              <span className="status">not authenticated</span>
+            )}
+          </div>
 
-      {!serverSession?.authenticated ? (
-        <button className="btn btn--primary" onClick={handleSignIn} disabled={isSigning}>
-          {isSigning ? 'Signing...' : 'Sign in to access /protected'}
-        </button>
-      ) : (
-        <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap' }}>
-          <a href="/protected/dashboard" className="btn btn--primary">Visit protected dashboard →</a>
+          {!serverSession?.authenticated ? (
+            <button className="btn btn--primary" onClick={handleSignIn} disabled={isSigning}>
+              {isSigning ? 'Signing...' : 'Sign in to access /protected'}
+            </button>
+          ) : (
+            <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap' }}>
+              <a href="/protected/dashboard" className="btn btn--primary">Visit protected dashboard →</a>
+            </div>
+          )}
+
+          {error && (
+            <div className="result-block result-block--error" style={{ marginTop: '1rem' }}>
+              {error}
+            </div>
+          )}
         </div>
       )}
-
-      {error && (
-        <div className="result-block result-block--error" style={{ marginTop: '1rem' }}>
-          {error}
-        </div>
-      )}
-    </div>
+    </ConnectGate>
   );
 }
 

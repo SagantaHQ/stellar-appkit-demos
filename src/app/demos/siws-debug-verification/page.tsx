@@ -4,9 +4,10 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { useSignIn, useSession } from '@saganta/stellar-appkit-ui-web/react';
+import { useSignIn } from '@saganta/stellar-appkit-ui-web/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
+import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
 export default function SiwsDebugVerificationDemo() {
@@ -46,14 +47,12 @@ export default function SiwsDebugVerificationDemo() {
 }
 
 function DebugDemo() {
-  const walletSession = useSession();
   const { sign, isSigning, data } = useSignIn();
   const [diagnostics, setDiagnostics] = useState<unknown>(null);
   const [tamper, setTamper] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSignAndVerify = async () => {
-    if (!walletSession) return;
     setError(null);
     setDiagnostics(null);
     try {
@@ -85,58 +84,54 @@ function DebugDemo() {
     }
   };
 
-  if (!walletSession) {
-    return (
-      <div className="empty-state">
-        Connect a wallet first (use the <strong>Connect a Wallet</strong> demo above).
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <div className="field">
-        <label className="field__label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <input
-            type="checkbox"
-            checked={tamper}
-            onChange={(e) => setTamper(e.target.checked)}
-          />
-          Tamper with signedData (force verification failure)
-        </label>
-      </div>
-
-      <button className="btn btn--primary" onClick={handleSignAndVerify} disabled={isSigning}>
-        {isSigning ? 'Signing...' : 'Sign & verify (with debug)'}
-      </button>
-
-      {data && (
-        <>
-          <div className="field__label" style={{ marginTop: '1rem', marginBottom: '0.375rem' }}>
-            Sign result
+    <ConnectGate>
+      {(session) => (
+        <div>
+          <div className="field">
+            <label className="field__label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input
+                type="checkbox"
+                checked={tamper}
+                onChange={(e) => setTamper(e.target.checked)}
+              />
+              Tamper with signedData (force verification failure)
+            </label>
           </div>
-          <div className="result-block" style={{ maxHeight: '120px' }}>
-            {JSON.stringify({
-              signedData: data.signedData,
-              signerAddress: data.signerAddress,
-            }, null, 2)}
-          </div>
-        </>
+
+          <button className="btn btn--primary" onClick={handleSignAndVerify} disabled={isSigning}>
+            {isSigning ? 'Signing...' : 'Sign & verify (with debug)'}
+          </button>
+
+          {data && (
+            <>
+              <div className="field__label" style={{ marginTop: '1rem', marginBottom: '0.375rem' }}>
+                Sign result
+              </div>
+              <div className="result-block" style={{ maxHeight: '120px' }}>
+                {JSON.stringify({
+                  signedData: data.signedData,
+                  signerAddress: data.signerAddress,
+                }, null, 2)}
+              </div>
+            </>
+          )}
+
+          {diagnostics ? (
+            <>
+              <div className="field__label" style={{ marginTop: '1rem', marginBottom: '0.375rem' }}>
+                Verification result {tamper ? '(tampered — should fail)' : '(should succeed)'}
+              </div>
+              <div className={`result-block ${tamper ? 'result-block--error' : 'result-block--success'}`}>
+                {JSON.stringify(diagnostics, null, 2)}
+              </div>
+            </>
+          ) : null}
+
+          <ErrorBlock error={error} style={{ marginTop: '1rem' }} />
+        </div>
       )}
-
-      {diagnostics ? (
-        <>
-          <div className="field__label" style={{ marginTop: '1rem', marginBottom: '0.375rem' }}>
-            Verification result {tamper ? '(tampered — should fail)' : '(should succeed)'}
-          </div>
-          <div className={`result-block ${tamper ? 'result-block--error' : 'result-block--success'}`}>
-            {JSON.stringify(diagnostics, null, 2)}
-          </div>
-        </>
-      ) : null}
-
-      <ErrorBlock error={error} style={{ marginTop: '1rem' }} />
-    </div>
+    </ConnectGate>
   );
 }
 

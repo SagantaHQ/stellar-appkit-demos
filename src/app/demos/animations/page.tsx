@@ -8,6 +8,7 @@ import type { StellarAppKit } from '@saganta/stellar-appkit';
 import { useAppKit } from '@saganta/stellar-appkit-ui-web/react';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
+import { ConnectGate } from '@/components/connect-gate';
 
 type AnimationPreset = 'none' | 'fade' | 'scale' | 'scale-blur' | 'slide-up' | 'slide-left' | 'implode';
 type Mode = 'auto' | 'modal' | 'bottomsheet';
@@ -88,42 +89,46 @@ export default function AnimationsDemo() {
     <DemoPageLayout slug="animations">
       <div className="demo-page__layout">
         <DemoPanel title="Try every animation preset">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div className="field">
-              <label className="field__label">Presentation mode</label>
-              <select className="field__select" value={mode} onChange={(e) => setMode(e.target.value as Mode)}>
-                <option value="modal">modal (desktop, centered)</option>
-                <option value="bottomsheet">bottomsheet (mobile, draggable)</option>
-                <option value="auto">auto (modal on desktop, bottomsheet on mobile)</option>
-              </select>
-            </div>
+          <ConnectGate>
+            {(session) => (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <div className="field">
+                  <label className="field__label">Presentation mode</label>
+                  <select className="field__select" value={mode} onChange={(e) => setMode(e.target.value as Mode)}>
+                    <option value="modal">modal (desktop, centered)</option>
+                    <option value="bottomsheet">bottomsheet (mobile, draggable)</option>
+                    <option value="auto">auto (modal on desktop, bottomsheet on mobile)</option>
+                  </select>
+                </div>
 
-            <div className="field">
-              <label className="field__label">Open animation</label>
-              <select className="field__select" value={openPreset} onChange={(e) => setOpenPreset(e.target.value as AnimationPreset)}>
-                {PRESETS.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.label}{p.defaultFor ? ` (default for ${p.defaultFor})` : ''}
-                  </option>
-                ))}
-              </select>
-            </div>
+                <div className="field">
+                  <label className="field__label">Open animation</label>
+                  <select className="field__select" value={openPreset} onChange={(e) => setOpenPreset(e.target.value as AnimationPreset)}>
+                    {PRESETS.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.label}{p.defaultFor ? ` (default for ${p.defaultFor})` : ''}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-            <div className="field">
-              <label className="field__label">Close animation</label>
-              <select className="field__select" value={closePreset} onChange={(e) => setClosePreset(e.target.value as AnimationPreset)}>
-                {PRESETS.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.label}{p.defaultFor ? ` (default for ${p.defaultFor})` : ''}
-                  </option>
-                ))}
-              </select>
-            </div>
+                <div className="field">
+                  <label className="field__label">Close animation</label>
+                  <select className="field__select" value={closePreset} onChange={(e) => setClosePreset(e.target.value as AnimationPreset)}>
+                    {PRESETS.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.label}{p.defaultFor ? ` (default for ${p.defaultFor})` : ''}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-            <button className="btn btn--primary" onClick={openModal}>
-              Open modal with these animations
-            </button>
-          </div>
+                <button className="btn btn--primary" onClick={openModal}>
+                  Open modal with these animations
+                </button>
+              </div>
+            )}
+          </ConnectGate>
         </DemoPanel>
 
         <DemoPanel title="Preset reference">

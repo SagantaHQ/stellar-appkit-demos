@@ -12,7 +12,7 @@ Built with **Next.js 15** + **OpenNext for Cloudflare** (deployed on Cloudflare 
 
 ## Demos
 
-19 demos across 5 categories — each is a single Next.js route you can copy into your own app:
+20 demos across 5 categories — each is a single Next.js route you can copy into your own app:
 
 ### Wallet Connection
 - **Connect a Wallet** — the minimal modal-based flow
@@ -22,6 +22,7 @@ Built with **Next.js 15** + **OpenNext for Cloudflare** (deployed on Cloudflare 
 
 ### Signing & Previews
 - **Sign a Transaction** — build XDR, sign through the modal preview
+- **Send XLM (Sign + Submit)** — build a real payment, sign, submit to Horizon Testnet, view on explorer
 - **Sign a Message** — `signedData` field for SIWS verification
 - **Custom Transaction Preview** — your own preview UI with `usePreviewTransaction()`
 
@@ -140,9 +141,9 @@ All demos run on **Stellar Testnet**. Connect a wallet with Testnet funds — ge
 
 - [Next.js 15](https://nextjs.org) (App Router, React 19)
 - [OpenNext for Cloudflare](https://opennext.js.org/cloudflare) — runs Next.js on Cloudflare Workers
-- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v1.9.18 (from npm)
-- [@saganta/stellar-appkit-ui-web](https://github.com/sagantaHQ/stellar-appkit) v1.9.18 (from npm)
-- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v1.9.18 (from npm)
+- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v1.9.19 (from npm)
+- [@saganta/stellar-appkit-ui-web](https://github.com/sagantaHQ/stellar-appkit) v1.9.19 (from npm)
+- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v1.9.19 (from npm)
 - [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config, no `tailwind.config.js`)
 
 ## License

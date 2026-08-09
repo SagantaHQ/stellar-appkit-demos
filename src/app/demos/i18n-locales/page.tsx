@@ -6,13 +6,12 @@ import { useState } from 'react';
 import {
   useLocale,
   useSetLocale,
-  useConnect,
-  useSession,
 } from '@saganta/stellar-appkit-ui-web/react';
 import type { LocaleCode } from '@saganta/stellar-appkit';
 import { openAppKitModal } from '@/components/appkit-provider';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
+import { ConnectGate } from '@/components/connect-gate';
 
 const LOCALES: { code: LocaleCode; native: string }[] = [
   { code: 'en', native: 'English' },
@@ -76,8 +75,6 @@ export default function I18nDemo() {
 function I18nDemoInner() {
   const locale = useLocale();
   const setLocale = useSetLocale();
-  const { isConnected } = useConnect();
-  const session = useSession();
   const [loadingLocale, setLoadingLocale] = useState<LocaleCode | null>(null);
 
   const handleLocaleChange = async (code: LocaleCode) => {
@@ -91,57 +88,59 @@ function I18nDemoInner() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <div>
-        <div className="field__label" style={{ marginBottom: '0.5rem' }}>Current locale</div>
-        <div className="address" style={{ display: 'inline-block' }}>
-          <code>{locale}</code> — {LOCALES.find((l) => l.code === locale)?.native ?? locale}
-        </div>
-      </div>
-      <div>
-        <div className="field__label" style={{ marginBottom: '0.5rem' }}>Switch locale (lazy-loaded on first use)</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '0.5rem', maxHeight: '280px', overflowY: 'auto', padding: '0.25rem' }}>
-          {LOCALES.map((l) => (
-            <button
-              key={l.code}
-              onClick={() => handleLocaleChange(l.code)}
-              disabled={loadingLocale !== null}
-              style={{
-                display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.125rem',
-                padding: '0.5rem 0.75rem', borderRadius: '8px',
-                border: locale === l.code ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
-                background: locale === l.code ? 'rgba(110, 231, 183, 0.1)' : 'transparent',
-                color: 'var(--color-text)', cursor: loadingLocale !== null ? 'wait' : 'pointer',
-                textAlign: 'left', fontSize: '0.8125rem',
-                opacity: loadingLocale !== null && loadingLocale !== l.code ? 0.5 : 1,
-              }}
-            >
-              <span style={{ fontWeight: 600 }}>{l.native}</span>
-              <span style={{ fontSize: '0.6875rem', color: 'var(--color-text-muted)' }}>
-                {l.code}{loadingLocale === l.code ? ' · loading…' : ''}
-              </span>
+    <ConnectGate>
+      {(session) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div>
+            <div className="field__label" style={{ marginBottom: '0.5rem' }}>Current locale</div>
+            <div className="address" style={{ display: 'inline-block' }}>
+              <code>{locale}</code> — {LOCALES.find((l) => l.code === locale)?.native ?? locale}
+            </div>
+          </div>
+          <div>
+            <div className="field__label" style={{ marginBottom: '0.5rem' }}>Switch locale (lazy-loaded on first use)</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '0.5rem', maxHeight: '280px', overflowY: 'auto', padding: '0.25rem' }}>
+              {LOCALES.map((l) => (
+                <button
+                  key={l.code}
+                  onClick={() => handleLocaleChange(l.code)}
+                  disabled={loadingLocale !== null}
+                  style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.125rem',
+                    padding: '0.5rem 0.75rem', borderRadius: '8px',
+                    border: locale === l.code ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
+                    background: locale === l.code ? 'rgba(110, 231, 183, 0.1)' : 'transparent',
+                    color: 'var(--color-text)', cursor: loadingLocale !== null ? 'wait' : 'pointer',
+                    textAlign: 'left', fontSize: '0.8125rem',
+                    opacity: loadingLocale !== null && loadingLocale !== l.code ? 0.5 : 1,
+                  }}
+                >
+                  <span style={{ fontWeight: 600 }}>{l.native}</span>
+                  <span style={{ fontSize: '0.6875rem', color: 'var(--color-text-muted)' }}>
+                    {l.code}{loadingLocale === l.code ? ' · loading…' : ''}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <button className="btn btn--primary" onClick={() => openAppKitModal()}>
+              Open modal
             </button>
-          ))}
+            <span style={{ marginLeft: '0.75rem', fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
+              Connected as {session.address.slice(0, 8)}…
+            </span>
+          </div>
+          <div className="result-block" style={{ marginTop: '0.5rem' }}>
+            <div style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>What to look for in the modal:</div>
+            <ul style={{ margin: 0, paddingLeft: '1.25rem', fontSize: '0.8125rem', color: 'var(--color-text-muted)', lineHeight: 1.7 }}>
+              <li>Panel title, wallet status labels, footer, ARIA labels all translated</li>
+              <li>For RTL locales (ar, he, fa): text is translated naturally</li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div>
-        <button className="btn btn--primary" onClick={() => openAppKitModal()}>
-          {isConnected ? 'Open modal' : 'Connect wallet'}
-        </button>
-        {isConnected && session && (
-          <span style={{ marginLeft: '0.75rem', fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
-            Connected as {session.address.slice(0, 8)}…
-          </span>
-        )}
-      </div>
-      <div className="result-block" style={{ marginTop: '0.5rem' }}>
-        <div style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>What to look for in the modal:</div>
-        <ul style={{ margin: 0, paddingLeft: '1.25rem', fontSize: '0.8125rem', color: 'var(--color-text-muted)', lineHeight: 1.7 }}>
-          <li>Panel title, wallet status labels, footer, ARIA labels all translated</li>
-          <li>For RTL locales (ar, he, fa): text is translated naturally</li>
-        </ul>
-      </div>
-    </div>
+      )}
+    </ConnectGate>
   );
 }
 

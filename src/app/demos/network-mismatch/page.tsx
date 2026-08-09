@@ -8,6 +8,7 @@ import { useConnect, useAppKit } from '@saganta/stellar-appkit-ui-web/react';
 import { NetworkMismatchError } from '@saganta/stellar-appkit';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
+import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
 export default function NetworkMismatchDemo() {
@@ -85,21 +86,27 @@ function NetworkDemo() {
   };
 
   return (
+    <ConnectGate>
+      {() => (
     <div>
+      <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', marginBottom: '1rem' }}>
+        Connected! Now switch your wallet extension to <strong>Public</strong> network,
+        then click a button below to see the mismatch error.
+      </p>
       <div style={{ display: 'flex', gap: '0.625rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
         <button
           className="btn btn--primary"
           onClick={() => handleConnect(false)}
           disabled={status === 'connecting' || retrying}
         >
-          {status === 'connecting' && !retrying ? 'Connecting...' : 'Connect (manual)'}
+          {status === 'connecting' && !retrying ? 'Connecting...' : 'Reconnect (manual)'}
         </button>
         <button
           className="btn"
           onClick={() => handleConnect(true)}
           disabled={status === 'connecting' || retrying}
         >
-          {retrying ? 'Waiting for network switch...' : 'Connect with auto-retry'}
+          {retrying ? 'Waiting for network switch...' : 'Reconnect with auto-retry'}
         </button>
       </div>
 
@@ -119,6 +126,8 @@ function NetworkDemo() {
         </div>
       )}
     </div>
+      )}
+    </ConnectGate>
   );
 }
 

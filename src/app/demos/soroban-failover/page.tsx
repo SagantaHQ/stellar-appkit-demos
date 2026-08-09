@@ -11,6 +11,7 @@ import { SorobanConnection } from '@saganta/stellar-appkit';
 // const Networks = { TESTNET: 'Test SDF Network ; September 2015' };
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
+import { ConnectGate } from '@/components/connect-gate';
 import { ErrorBlock } from '@/components/error-block';
 
 const PRIMARY_RPC = 'https://soroban-testnet.stellar.org';
@@ -79,6 +80,8 @@ function FailoverDemo() {
   };
 
   return (
+    <ConnectGate>
+      {() => (
     <div>
       <div className="field">
         <label className="field__label">Primary RPC</label>
@@ -106,6 +109,8 @@ function FailoverDemo() {
 
       <ErrorBlock error={error} style={{ marginTop: '1rem' }} />
     </div>
+      )}
+    </ConnectGate>
   );
 }
 

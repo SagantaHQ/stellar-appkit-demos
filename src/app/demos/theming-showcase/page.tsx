@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useConnect } from '@saganta/stellar-appkit-ui-web/react';
 import { openAppKitModal } from '@/components/appkit-provider';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { ConnectGate } from '@/components/connect-gate';
 
 interface ThemeState {
   bg: string;
@@ -57,45 +58,49 @@ ${Object.entries(cssVars).filter(([, v]) => typeof v === 'string').map(([k, v]) 
     <DemoPageLayout slug="theming-showcase">
       <div className="demo-page__layout">
         <DemoPanel title="Live preview">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div className="field">
-              <label className="field__label">Preset</label>
-              <select
-                className="field__select"
-                value={Object.entries(PRESETS).find(([, v]) => JSON.stringify(v) === JSON.stringify(theme))?.[0] ?? ''}
-                onChange={(e) => setTheme(PRESETS[e.target.value])}
-              >
-                {Object.keys(PRESETS).map((name) => (
-                  <option key={name} value={name}>{name}</option>
-                ))}
-              </select>
-            </div>
+          <ConnectGate>
+            {(session) => (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="field">
+                  <label className="field__label">Preset</label>
+                  <select
+                    className="field__select"
+                    value={Object.entries(PRESETS).find(([, v]) => JSON.stringify(v) === JSON.stringify(theme))?.[0] ?? ''}
+                    onChange={(e) => setTheme(PRESETS[e.target.value])}
+                  >
+                    {Object.keys(PRESETS).map((name) => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </select>
+                </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.625rem' }}>
-              <ColorField label="Background" value={theme.bg} onChange={(v) => setTheme({ ...theme, bg: v })} />
-              <ColorField label="Surface" value={theme.surface} onChange={(v) => setTheme({ ...theme, surface: v })} />
-              <ColorField label="Accent" value={theme.accent} onChange={(v) => setTheme({ ...theme, accent: v })} />
-              <ColorField label="Text" value={theme.text} onChange={(v) => setTheme({ ...theme, text: v })} />
-            </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.625rem' }}>
+                  <ColorField label="Background" value={theme.bg} onChange={(v) => setTheme({ ...theme, bg: v })} />
+                  <ColorField label="Surface" value={theme.surface} onChange={(v) => setTheme({ ...theme, surface: v })} />
+                  <ColorField label="Accent" value={theme.accent} onChange={(v) => setTheme({ ...theme, accent: v })} />
+                  <ColorField label="Text" value={theme.text} onChange={(v) => setTheme({ ...theme, text: v })} />
+                </div>
 
-            <div className="field">
-              <label className="field__label">Radius (large)</label>
-              <input className="field__input" value={theme.radiusLg} onChange={(e) => setTheme({ ...theme, radiusLg: e.target.value })} />
-            </div>
+                <div className="field">
+                  <label className="field__label">Radius (large)</label>
+                  <input className="field__input" value={theme.radiusLg} onChange={(e) => setTheme({ ...theme, radiusLg: e.target.value })} />
+                </div>
 
-            <button className="btn btn--primary" onClick={() => {
-              // Apply the theme CSS vars to the persistent modal element
-              const modal = document.querySelector<HTMLElement>('stellar-appkit-modal');
-              if (modal) {
-                Object.entries(cssVars).forEach(([k, v]) => {
-                  modal.style.setProperty(k, v as string);
-                });
-              }
-              openAppKitModal();
-            }}>
-              Open modal with this theme
-            </button>
-          </div>
+                <button className="btn btn--primary" onClick={() => {
+                  // Apply the theme CSS vars to the persistent modal element
+                  const modal = document.querySelector<HTMLElement>('stellar-appkit-modal');
+                  if (modal) {
+                    Object.entries(cssVars).forEach(([k, v]) => {
+                      modal.style.setProperty(k, v as string);
+                    });
+                  }
+                  openAppKitModal();
+                }}>
+                  Open modal with this theme
+                </button>
+              </div>
+            )}
+          </ConnectGate>
         </DemoPanel>
 
         <DemoPanel title="CSS snippet">

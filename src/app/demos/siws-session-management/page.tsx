@@ -6,7 +6,6 @@ export const dynamic = 'force-dynamic';
 import { useEffect, useState, useCallback } from 'react';
 import {
   useAppKit,
-  useSession,
   useSignIn,
   useSiwsSession,
   useIsAuthenticated,
@@ -14,6 +13,7 @@ import {
 import type { SiwsSession, SiwsError } from '@saganta/stellar-appkit';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
 import { CodeBlock } from '@/components/code-block';
+import { ConnectGate } from '@/components/connect-gate';
 
 export default function SiwsSessionManagementDemo() {
   return (
@@ -85,7 +85,6 @@ export default function SiwsSessionManagementDemo() {
 
 function SiwsSessionDemo() {
   const appkit = useAppKit();
-  const walletSession = useSession();
   const siwsSession = useSiwsSession();
   const isAuthenticated = useIsAuthenticated();
   const { sign, isSigning } = useSignIn();
@@ -110,7 +109,6 @@ function SiwsSessionDemo() {
   }, [siwsSession]);
 
   const handleSignIn = async () => {
-    if (!walletSession) return;
     setActionError(null);
     log('Starting SIWS sign-in…');
     try {
@@ -256,20 +254,14 @@ function SiwsSessionDemo() {
     }
   };
 
-  if (!walletSession) {
-    return (
-      <div className="empty-state">
-        Connect a wallet first (use the <strong>Connect a Wallet</strong> demo above).
-      </div>
-    );
-  }
-
   return (
+    <ConnectGate>
+      {(session) => (
     <div>
       {/* Wallet session */}
       <div style={{ marginBottom: '1rem' }}>
         <div className="field__label" style={{ marginBottom: '0.375rem' }}>Wallet session</div>
-        <div className="address">{walletSession.address}</div>
+        <div className="address">{session.address}</div>
       </div>
 
       {/* SIWS session (local) — driven by useSiwsSession() */}
@@ -360,6 +352,8 @@ function SiwsSessionDemo() {
         </div>
       )}
     </div>
+      )}
+    </ConnectGate>
   );
 }
 

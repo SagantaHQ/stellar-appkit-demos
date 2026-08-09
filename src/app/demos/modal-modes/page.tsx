@@ -7,6 +7,7 @@ import { useRef, useState } from 'react';
 import { useAppKit } from '@saganta/stellar-appkit-ui-web/react';
 import type { StellarAppKit } from '@saganta/stellar-appkit';
 import { DemoPageLayout, DemoPanel } from '@/components/demo-page-layout';
+import { ConnectGate } from '@/components/connect-gate';
 
 type Mode = 'auto' | 'modal' | 'bottomsheet' | 'inline';
 type AnimationPreset = 'default' | 'none' | 'fade' | 'scale' | 'scale-blur' | 'slide-up' | 'slide-left' | 'implode';
@@ -50,45 +51,49 @@ export default function ModalModesDemo() {
     <DemoPageLayout slug="modal-modes">
       <div className="demo-page__layout">
         <DemoPanel title="Live demo">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div className="field">
-              <label className="field__label">Presentation mode</label>
-              <select className="field__select" value={mode} onChange={(e) => setMode(e.target.value as Mode)}>
-                <option value="auto">auto (modal on desktop, bottomsheet on mobile)</option>
-                <option value="modal">modal (always centered)</option>
-                <option value="bottomsheet">bottomsheet (always draggable sheet)</option>
-                <option value="inline">inline (embedded, no overlay)</option>
-              </select>
-            </div>
+          <ConnectGate>
+            {(session) => (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="field">
+                  <label className="field__label">Presentation mode</label>
+                  <select className="field__select" value={mode} onChange={(e) => setMode(e.target.value as Mode)}>
+                    <option value="auto">auto (modal on desktop, bottomsheet on mobile)</option>
+                    <option value="modal">modal (always centered)</option>
+                    <option value="bottomsheet">bottomsheet (always draggable sheet)</option>
+                    <option value="inline">inline (embedded, no overlay)</option>
+                  </select>
+                </div>
 
-            <div className="field">
-              <label className="field__label">Open / close animation</label>
-              <select
-                className="field__select"
-                value={animation}
-                onChange={(e) => setAnimation(e.target.value as AnimationPreset)}
-              >
-                {ANIMATION_PRESETS.map((p) => (
-                  <option key={p.value} value={p.value}>{p.label}</option>
-                ))}
-              </select>
-              <div style={{ marginTop: '0.5rem', fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
-                Animations are zero-dependency WAAPI. <code>prefers-reduced-motion</code> is respected automatically.
+                <div className="field">
+                  <label className="field__label">Open / close animation</label>
+                  <select
+                    className="field__select"
+                    value={animation}
+                    onChange={(e) => setAnimation(e.target.value as AnimationPreset)}
+                  >
+                    {ANIMATION_PRESETS.map((p) => (
+                      <option key={p.value} value={p.value}>{p.label}</option>
+                    ))}
+                  </select>
+                  <div style={{ marginTop: '0.5rem', fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
+                    Animations are zero-dependency WAAPI. <code>prefers-reduced-motion</code> is respected automatically.
+                  </div>
+                </div>
+
+                {mode !== 'inline' && (
+                  <button className="btn btn--primary" onClick={openModal}>
+                    Open modal
+                  </button>
+                )}
+
+                {mode === 'inline' && (
+                  <div style={{ marginTop: '0.5rem', fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
+                    Inline mode renders in place — the modal below is always visible.
+                  </div>
+                )}
               </div>
-            </div>
-
-            {mode !== 'inline' && (
-              <button className="btn btn--primary" onClick={openModal}>
-                Open modal
-              </button>
             )}
-
-            {mode === 'inline' && (
-              <div style={{ marginTop: '0.5rem', fontSize: '0.8125rem', color: 'var(--color-text-muted)' }}>
-                Inline mode renders in place — the modal below is always visible.
-              </div>
-            )}
-          </div>
+          </ConnectGate>
         </DemoPanel>
 
         <DemoPanel title="How it works">
