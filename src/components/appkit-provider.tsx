@@ -116,7 +116,7 @@ function PersistentModal() {
     <stellar-appkit-modal
       ref={setModalRef as never}
       mode="auto"
-      theme="dark"
+      theme="minimal"
     />
   );
 }
