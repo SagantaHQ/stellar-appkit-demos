@@ -141,9 +141,9 @@ All demos run on **Stellar Testnet**. Connect a wallet with Testnet funds — ge
 
 - [Next.js 15](https://nextjs.org) (App Router, React 19)
 - [OpenNext for Cloudflare](https://opennext.js.org/cloudflare) — runs Next.js on Cloudflare Workers
-- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v1.9.47 (from npm)
-- [@saganta/stellar-appkit-ui-web](https://github.com/sagantaHQ/stellar-appkit) v1.9.47 (from npm)
-- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v1.9.47 (from npm)
+- [@saganta/stellar-appkit](https://github.com/sagantaHQ/stellar-appkit) v1.9.48 (from npm)
+- [@saganta/stellar-appkit-ui-web](https://github.com/sagantaHQ/stellar-appkit) v1.9.48 (from npm)
+- [@saganta/stellar-appkit-siws-verify](https://github.com/sagantaHQ/stellar-appkit) v1.9.48 (from npm)
 - [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config, no `tailwind.config.js`)
 
 ## License
