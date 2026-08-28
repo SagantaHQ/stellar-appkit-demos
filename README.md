@@ -12,7 +12,7 @@ Built with **Next.js 15** + **OpenNext for Cloudflare** (deployed on Cloudflare 
 
 ## Demos
 
-20 demos across 5 categories — each is a single Next.js route you can copy into your own app:
+19 demos across 5 categories — each is a single Next.js route you can copy into your own app:
 
 ### Wallet Connection
 - **Connect a Wallet** — the minimal modal-based flow
