@@ -128,7 +128,18 @@ function PersistentModal() {
  */
 export function openAppKitModal() {
   const el = document.querySelector<HTMLElement & { open?: () => Promise<void> }>('stellar-appkit-modal');
-  if (el) {
-    el.open?.();
+  if (!el) return;
+  if (typeof el.open === 'function') {
+    void el.open();
+    return;
   }
+  // Pre-hydration click: the element exists in the SSR HTML but the custom
+  // element hasn't been defined yet (the ui-web module is still downloading/
+  // evaluating), so el.open is undefined and the click would be silently
+  // LOST — the user taps "Connect wallet", nothing happens, and the modal
+  // only opens after they click again post-hydration. Queue the open for
+  // the moment the definition lands instead.
+  void customElements.whenDefined('stellar-appkit-modal').then(() => {
+    if (typeof el.open === 'function') void el.open();
+  });
 }
