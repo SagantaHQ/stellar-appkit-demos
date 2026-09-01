@@ -77,7 +77,7 @@ function SignDemo() {
           asset: sdk.Asset.native(),
           amount: AMOUNT,
         }))
-        .setTimeout(30)
+        .setTimeout(300) // 5 min: the signed XDR must stay submittable after the modal preview + wallet approval roundtrip — 30s expires mid-flight
         .build();
 
       setXdr(tx.toXDR());
@@ -169,7 +169,7 @@ function SignButton() {
         asset: sdk.Asset.native(),
         amount: '1',
       }))
-      .setTimeout(30)
+      .setTimeout(300) // 5 min — keeps the signed XDR submittable after a slow wallet approval
       .build();
 
     // sign() opens the modal preview automatically — decoded operations,

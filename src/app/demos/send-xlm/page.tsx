@@ -107,7 +107,7 @@ function SendDemo() {
           asset: sdk.Asset.native(),
           amount: amount,
         }))
-        .setTimeout(30)
+        .setTimeout(300) // 5 min: must survive the modal preview + wallet approval roundtrip — 30s expires mid-flight and Horizon returns tx_too_late
         .build();
 
       setIsBuilding(false);
@@ -265,7 +265,7 @@ function SendButton({ session }: { session: { address: string } }) {
         asset: sdk.Asset.native(),  // native = XLM
         amount: '1',
       }))
-      .setTimeout(30)
+      .setTimeout(300) // 5 min — the tx must survive the modal preview + wallet approval roundtrip before submission
       .build();
 
     // 3. Sign via the modal preview (user approves, then wallet signs)
